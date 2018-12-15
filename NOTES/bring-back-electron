@@ -1,0 +1,10 @@
+To bring back electron:
+
+There is a package.json.ELECTRON file in the root directory. 
+Need the following lines under the script: value
+    "electron": "ng build --base-href ./ && electron ."
+See this after version as well:
+    "main": "main.js",
+
+    
+The "main.js" file is for electron (also in root)

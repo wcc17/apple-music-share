@@ -1,0 +1,8 @@
+https://help.apple.com/developer-account/#/devcdfbb56a3
+
+
+After generating the private key above, use the following script:
+https://github.com/pelauimagineering/apple-music-token-generator
+
+As of 12/14/2018 I already have the keyID and teamID in that script in the Development/apple-music-token-generator
+folder. So it should be pretty easy to do^^
