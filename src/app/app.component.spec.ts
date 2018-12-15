@@ -23,7 +23,7 @@ describe('AppComponent', () => {
   it(`should have as title 'apple-music-share'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('apple-music-share');
+    expect(app.title).toEqual('Apple Music Share');
   });
 
   it('should render title in a h1 tag', () => {
