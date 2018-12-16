@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+#navigationCol {
+    position: sticky;
+}
+
+#navRow {
+    border: 1px solid red;
+}
+
+#playerControlsRow {
+    border: 1px solid blue;
+    background: grey;
+}
