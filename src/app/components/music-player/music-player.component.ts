@@ -13,7 +13,7 @@ export class MusicPlayerComponent implements OnInit {
   }
 
   playMusic(): void {
-
+    
   }
 
 }
