@@ -8,8 +8,12 @@
     I'm not sure whyh ng-bootstrap doesn't have a nav/doesn't mention it in the documentation
 -->
 <ngb-tabset type="pills" [orientation]="vertical">
-    <ngb-tab id="Queue" title="Queue"></ngb-tab>
-    <ngb-tab id="Recently Added" title="Recently Added"></ngb-tab>
+    <ngb-tab title="Queue">
+        <a routerLink="/queue" routerLinkActive="active"></a>
+    </ngb-tab>
+    <ngb-tab title="Recently Added">
+        <a routerLink="/recently-added" routerLinkActive="active"></a>
+    </ngb-tab>
     <ngb-tab id="Playlists" title="Playlists"></ngb-tab>
     <ngb-tab id="Artists" title="Artists"></ngb-tab>
     <ngb-tab id="Albums" title="Albums"></ngb-tab>
