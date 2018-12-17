@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { MusicPlayerComponent } from './components/music-player/music-player.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { ContentComponent } from './components/content/content.component';
+import { QueueComponent } from './components/queue/queue.component';
+import { RecentlyAddedComponent } from './components/recently-added/recently-added.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -14,7 +16,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AppComponent,
     MusicPlayerComponent,
     NavigationComponent,
-    ContentComponent
+    ContentComponent,
+    QueueComponent,
+    RecentlyAddedComponent
   ],
   imports: [
     BrowserModule,
