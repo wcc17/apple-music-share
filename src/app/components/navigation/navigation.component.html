@@ -7,17 +7,13 @@
     or else come up with a solution that moves the tabset below to the top of the page on mobile
     I'm not sure whyh ng-bootstrap doesn't have a nav/doesn't mention it in the documentation
 -->
-<ngb-tabset type="pills" [orientation]="vertical">
-    <ngb-tab title="Queue">
-        <a routerLink="/queue" routerLinkActive="active"></a>
-    </ngb-tab>
-    <ngb-tab title="Recently Added">
-        <a routerLink="/recently-added" routerLinkActive="active"></a>
-    </ngb-tab>
-    <ngb-tab id="Playlists" title="Playlists"></ngb-tab>
-    <ngb-tab id="Artists" title="Artists"></ngb-tab>
-    <ngb-tab id="Albums" title="Albums"></ngb-tab>
-    <ngb-tab id="Songs" title="Songs"></ngb-tab>
-    <ngb-tab id="Search" title="Search"></ngb-tab>
-    <ngb-tab id="Settings" title="Settings"></ngb-tab>
+<ngb-tabset type="pills" [orientation]="vertical" (tabChange)="onTabChange($event)">
+    <ngb-tab id="queue" title="Queue"></ngb-tab>
+    <ngb-tab id="recently-added" title="Recently Added"></ngb-tab>
+    <ngb-tab id="playlists" title="Playlists"></ngb-tab>
+    <ngb-tab id="artists" title="Artists"></ngb-tab>
+    <ngb-tab id="albums" title="Albums"></ngb-tab>
+    <ngb-tab id="songs" title="Songs"></ngb-tab>
+    <ngb-tab id="search" title="Search"></ngb-tab>
+    <ngb-tab id="settings" title="Settings"></ngb-tab>
 </ngb-tabset>

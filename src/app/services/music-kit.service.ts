@@ -18,21 +18,21 @@ export class MusicKitService {
       }
     });
 
-    // //ensure user is authorized
-    // this.musicKit = MusicKit.getInstance();
-    // this.musicKit.authorize().then( () => {
-    //   this.isAuthorized = true;
-    // });
+    //ensure user is authorized
+    this.musicKit = MusicKit.getInstance();
+    this.musicKit.authorize().then( () => {
+      this.isAuthorized = true;
+    });
   }
 
   testMethod(): void {
     console.log('calling the test method');
 
-    // this.musicKit.setQueue({
-    //   album: '1025210938'
-    // }).then( () => {
-    //   console.log('going to play the album');
-    //   this.musicKit.play();
-    // });
+    this.musicKit.setQueue({
+      album: '1025210938'
+    }).then( () => {
+      console.log('going to play the album');
+      this.musicKit.play();
+    });
   }
 }
