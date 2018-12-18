@@ -8,6 +8,12 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { ContentComponent } from './components/content/content.component';
 import { QueueComponent } from './components/queue/queue.component';
 import { RecentlyAddedComponent } from './components/recently-added/recently-added.component';
+import { PlaylistsComponent } from './components/playlists/playlists.component';
+import { ArtistsComponent } from './components/artists/artists.component';
+import { AlbumsComponent } from './components/albums/albums.component';
+import { SongsComponent } from './components/songs/songs.component';
+import { SearchComponent } from './components/search/search.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -18,7 +24,13 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NavigationComponent,
     ContentComponent,
     QueueComponent,
-    RecentlyAddedComponent
+    RecentlyAddedComponent,
+    PlaylistsComponent,
+    ArtistsComponent,
+    AlbumsComponent,
+    SongsComponent,
+    SearchComponent,
+    SettingsComponent
   ],
   imports: [
     BrowserModule,
