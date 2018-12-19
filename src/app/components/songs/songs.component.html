@@ -1,3 +1,18 @@
-<p>
-  songs works!
-</p>
+<table class="table table-striped btn-table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Time</th>
+      <th>Artist</th>
+      <th>Album</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let song of songs;">
+      <td>{{song.attributes.name}}</td>
+      <td>{{getMinutesAndSeconds(song.attributes.durationInMillis)}}</td>
+      <td>{{song.attributes.artistName}}</td>
+      <td>{{song.attributes.albumName}}</td>
+    </tr>
+  </tbody>
+</table>

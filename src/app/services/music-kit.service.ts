@@ -20,19 +20,38 @@ export class MusicKitService {
 
     //ensure user is authorized
     this.musicKit = MusicKit.getInstance();
-    this.musicKit.authorize().then( () => {
-      this.isAuthorized = true;
-    });
+    this.authorizeUser();
+  }
+
+  authorizeUser(): boolean {
+    if(!this.isAuthorized) {
+      this.musicKit.authorize().then( () => {
+        this.isAuthorized = true;
+      });
+    }
+
+    return this.isAuthorized;
   }
 
   testMethod(): void {
-    console.log('calling the test method');
+    // console.log('calling the test method');
 
-    this.musicKit.setQueue({
-      album: '1025210938'
-    }).then( () => {
-      console.log('going to play the album');
-      this.musicKit.play();
-    });
+    // this.musicKit.setQueue({
+    //   album: '1025210938'
+    // }).then( () => {
+    //   console.log('going to play the album');
+    //   this.musicKit.play();
+    // });
+
+    // this.musicKit.api.library.albums().then( (albums) => {
+    //   console.log('break here');
+    // });
+
+    // this.getSongs();
+  }
+
+  getSongs(): any {
+    //TODO: i think i want to use rxjs observables instead of regular promises
+    return this.musicKit.api.library.songs(null, { limit: 100, offset: 0 });
   }
 }
