@@ -15,6 +15,5 @@ export class AppComponent {
 
   //use this for real stuff 
   ngOnInit() {
-    this.musicKitService.testMethod();
   }
 }

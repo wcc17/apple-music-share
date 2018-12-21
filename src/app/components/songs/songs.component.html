@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let song of songs;">
+    <tr *ngFor="let song of songs;" (click)="onSongSelected(song)">
       <td>{{song.attributes.name}}</td>
       <td>{{getMinutesAndSeconds(song.attributes.durationInMillis)}}</td>
       <td>{{song.attributes.artistName}}</td>

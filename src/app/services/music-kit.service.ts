@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { from, Observable } from 'rxjs';
+import { mergeMap } from 'rxjs/operators';
 
 declare var MusicKit: any;
 
@@ -8,6 +10,7 @@ declare var MusicKit: any;
 export class MusicKitService {
   isAuthorized = false;
   musicKit: any;
+  songRequestLimit = 100;
 
   constructor() { 
     MusicKit.configure({
@@ -33,25 +36,35 @@ export class MusicKitService {
     return this.isAuthorized;
   }
 
-  testMethod(): void {
-    // console.log('calling the test method');
-
-    // this.musicKit.setQueue({
-    //   album: '1025210938'
-    // }).then( () => {
-    //   console.log('going to play the album');
-    //   this.musicKit.play();
-    // });
-
-    // this.musicKit.api.library.albums().then( (albums) => {
-    //   console.log('break here');
-    // });
-
-    // this.getSongs();
+  //TODO: need to pass in the index of the song in the playlist its in so that skipToNext and previous work
+  //so if we're playing a single song out of the entire list of songs, get the index in that list
+  //even if the list isn't all the way loaded, once that particular song is loaded its index won't change
+  playSong(id: number): Observable<any> {
+    return from(this.musicKit.setQueue({ song: id }))
+      .pipe( mergeMap( x => this.play() ));
   }
 
-  getSongs(): any {
-    //TODO: i think i want to use rxjs observables instead of regular promises
-    return this.musicKit.api.library.songs(null, { limit: 100, offset: 0 });
+  getSongs(startIndex: number): Observable<any> {
+    return from(this.musicKit.api.library.songs( null , { limit: this.songRequestLimit, offset: startIndex }));
+  }
+
+  play(): Observable<any> {
+    return from(this.musicKit.player.play());
+  }
+
+  pause(): Observable<any> {
+    return from(this.musicKit.player.pause());
+  }
+
+  stop(): Observable<any> {
+    return from(this.musicKit.player.stop());
+  }
+
+  skipToNext(): Observable<any> {
+    return from(this.musicKit.player.skipToNextItem());
+  }
+
+  skipToPrevious(): Observable<any> {
+    return from(this.musicKit.player.skipToPreviousItem());
   }
 }
