@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MusicKitService } from 'src/app/services/music-kit.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-music-player',
@@ -6,14 +8,28 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./music-player.component.css']
 })
 export class MusicPlayerComponent implements OnInit {
+  constructor(private musicKitService: MusicKitService) { }
 
-  constructor() { }
+  ngOnInit() { }
 
-  ngOnInit() {
+  onPlay(): void {
+    this.musicKitService.play().subscribe();
   }
 
-  playMusic(): void {
-    
+  onPause(): void {
+    this.musicKitService.pause().subscribe();
+  }
+
+  onStop(): void {
+    this.musicKitService.stop().subscribe();
+  }
+
+  onPrevious(): void {
+    this.musicKitService.skipToPrevious().subscribe();
+  }
+
+  onNext(): void {
+    this.musicKitService.skipToNext().subscribe();
   }
 
 }

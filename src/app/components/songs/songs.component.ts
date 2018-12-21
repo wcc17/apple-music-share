@@ -1,26 +1,39 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MusicKitService } from 'src/app/services/music-kit.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-songs',
   templateUrl: './songs.component.html',
   styleUrls: ['./songs.component.css']
 })
-export class SongsComponent implements OnInit {
-
-  //TODO: I should cache this or keep it somewhere
-  songs = [];
+export class SongsComponent implements OnInit, OnDestroy {
+  songs = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
+  subscriptions = new Subscription();
 
   constructor(private musicKitService: MusicKitService) { }
 
-  ngOnInit() {
-    this.musicKitService.getSongs().then( (songs) => {
-      this.songs = songs;
-    });
+  ngOnInit(): void {
+    this.getAllSongs(0);
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  getAllSongs(startIndex: number): void {
+    this.subscriptions.add( 
+      this.musicKitService.getSongs( startIndex ).subscribe( songs => {
+        if(songs.length) {
+          this.songs = this.songs.concat(songs);
+          //TODO: need to handle loading to show the user if songs are still being loaded
+          this.getAllSongs(startIndex + this.musicKitService.songRequestLimit);
+      }
+    }));
   }
 
   onSongSelected(song): void {
-    console.log(song);
+    this.subscriptions.add(this.musicKitService.playSong(song.attributes.playParams.catalogId).subscribe(x => console.log('playSong called again')));
   }
 
   getMinutesAndSeconds(durationInMillis: any): string {
