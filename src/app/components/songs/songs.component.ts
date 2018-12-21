@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 export class SongsComponent implements OnInit, OnDestroy {
   songs = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
   subscriptions = new Subscription();
+  selectedSongId = null;
 
   constructor(private musicKitService: MusicKitService) { }
 
@@ -33,7 +34,16 @@ export class SongsComponent implements OnInit, OnDestroy {
   }
 
   onSongSelected(song): void {
-    this.subscriptions.add(this.musicKitService.playSong(song.attributes.playParams.catalogId).subscribe(x => console.log('playSong called again')));
+    this.selectedSongId = song.id;
+    this.subscriptions.add(this.musicKitService.playSong(this.selectedSongId).subscribe());
+  }
+
+  isSelectedSong(song): boolean {
+    if(this.selectedSongId && song) {
+      return (song.id === this.selectedSongId);
+    }
+
+    return false;
   }
 
   getMinutesAndSeconds(durationInMillis: any): string {
