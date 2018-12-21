@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MusicKitService } from 'src/app/services/music-kit.service';
+import { PlayerService } from 'src/app/services/player.service';
 import { Subscription } from 'rxjs';
+import { LibraryService } from 'src/app/services/library.service';
 
 @Component({
   selector: 'app-songs',
@@ -8,11 +10,10 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./songs.component.css']
 })
 export class SongsComponent implements OnInit, OnDestroy {
-  songs = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
-  subscriptions = new Subscription();
-  selectedSongId = null;
+  private songs: any[] = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
+  private subscriptions: Subscription = new Subscription();
 
-  constructor(private musicKitService: MusicKitService) { }
+  constructor(private libraryService: LibraryService, private playerService: PlayerService) { }
 
   ngOnInit(): void {
     this.getAllSongs(0);
@@ -24,23 +25,23 @@ export class SongsComponent implements OnInit, OnDestroy {
 
   getAllSongs(startIndex: number): void {
     this.subscriptions.add( 
-      this.musicKitService.getSongs( startIndex ).subscribe( songs => {
+      this.libraryService.getSongs( startIndex ).subscribe( songs => {
         if(songs.length) {
           this.songs = this.songs.concat(songs);
           //TODO: need to handle loading to show the user if songs are still being loaded
-          this.getAllSongs(startIndex + this.musicKitService.songRequestLimit);
+          this.getAllSongs(startIndex + this.libraryService.getSongRequestLimit());
       }
     }));
   }
 
-  onSongSelected(song): void {
-    this.selectedSongId = song.id;
-    this.subscriptions.add(this.musicKitService.playSong(this.selectedSongId).subscribe());
+  onSongSelected(index): void {
+    this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
   }
 
-  isSelectedSong(song): boolean {
-    if(this.selectedSongId && song) {
-      return (song.id === this.selectedSongId);
+  isSelectedSong(index: number): boolean {
+    let currentSongId = this.playerService.getCurrentlyPlayingSongId();
+    if(currentSongId && this.songs) {
+      return (this.songs[index].id === currentSongId);
     }
 
     return false;
