@@ -1,0 +1,14 @@
+#musicPlayer {
+    text-align: center;
+}
+
+#playerSongInfo {
+    padding: 5px;
+    margin-top: 20px;
+}
+
+#playerControls {
+    border: 1px solid black;
+    padding: 5px;
+    display: inline-block;
+}

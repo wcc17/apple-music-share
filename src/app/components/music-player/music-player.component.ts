@@ -31,4 +31,8 @@ export class MusicPlayerComponent implements OnInit {
     this.playerService.skipToNext().subscribe();
   }
 
+  getCurrentSongInfo(): string {
+    let currentInfo = this.playerService.getCurrentlyPlayingSongInfo();
+    return (currentInfo) ? currentInfo : 'Welcome to Apple Music Share';
+  }
 }

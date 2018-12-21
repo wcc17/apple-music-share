@@ -1,7 +1,12 @@
-<div>
-  <button (click)='onPrevious()'>prev</button>
-  <button (click)='onPlay()'>play</button>
-  <button (click)='onPause()'>pause</button>
-  <button (click)='onStop()'>stop</button>
-  <button (click)='onNext()'>next</button>
+<div id="musicPlayer">
+  <div id="playerSongInfo">
+    {{ getCurrentSongInfo() }}
+  </div>
+  <div id="playerControls">
+    <button (click)='onPrevious()'>prev</button>
+    <button (click)='onPlay()'>play</button>
+    <button (click)='onPause()'>pause</button>
+    <button (click)='onStop()'>stop</button>
+    <button (click)='onNext()'>next</button>
+  </div>
 </div>
