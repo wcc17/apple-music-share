@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
-import { mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 declare var MusicKit: any;
 
@@ -8,9 +7,8 @@ declare var MusicKit: any;
   providedIn: 'root'
 })
 export class MusicKitService {
-  isAuthorized = false;
-  musicKit: any;
-  songRequestLimit = 100;
+  private isAuthorized: boolean = false;
+  private musicKit: any;
 
   constructor() { 
     MusicKit.configure({
@@ -36,35 +34,15 @@ export class MusicKitService {
     return this.isAuthorized;
   }
 
-  //TODO: need to pass in the index of the song in the playlist its in so that skipToNext and previous work
-  //so if we're playing a single song out of the entire list of songs, get the index in that list
-  //even if the list isn't all the way loaded, once that particular song is loaded its index won't change
-  playSong(id: number): Observable<any> {
-    return from(this.musicKit.setQueue({ song: id }))
-      .pipe( mergeMap( x => this.play() ));
+  setQueue(arg: any): Observable<any> {
+    return this.musicKit.setQueue(arg);
   }
 
-  getSongs(startIndex: number): Observable<any> {
-    return from(this.musicKit.api.library.songs( null , { limit: this.songRequestLimit, offset: startIndex }));
+  getPlayer(): any {
+    return this.musicKit.player;
   }
 
-  play(): Observable<any> {
-    return from(this.musicKit.player.play());
-  }
-
-  pause(): Observable<any> {
-    return from(this.musicKit.player.pause());
-  }
-
-  stop(): Observable<any> {
-    return from(this.musicKit.player.stop());
-  }
-
-  skipToNext(): Observable<any> {
-    return from(this.musicKit.player.skipToNextItem());
-  }
-
-  skipToPrevious(): Observable<any> {
-    return from(this.musicKit.player.skipToPreviousItem());
+  getLibrary(): any {
+    return this.musicKit.api.library;
   }
 }

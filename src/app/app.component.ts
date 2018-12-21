@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MusicKitService } from './services/music-kit.service';
 
 @Component({
   selector: 'app-root',
@@ -8,10 +7,8 @@ import { MusicKitService } from './services/music-kit.service';
 })
 export class AppComponent {
   
-  title = 'Apple Music Share';
-
   //reserve the constructor for simple initilization
-  constructor(private musicKitService: MusicKitService) { }
+  constructor() { }
 
   //use this for real stuff 
   ngOnInit() {
