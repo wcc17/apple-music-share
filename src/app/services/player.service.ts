@@ -9,6 +9,7 @@ import { MusicKitService } from './music-kit.service';
 })
 export class PlayerService {
   private player: any = this.musicKitService.getPlayer();
+  private isPlaying: boolean = false;
 
   constructor(private musicKitService: MusicKitService, private titleService: Title) { }
   
@@ -32,6 +33,7 @@ export class PlayerService {
   }
 
   play(): Observable<any> {
+    this.isPlaying = true;
     return this.modifyPlayback(from(this.player.play()));
   }
 
@@ -40,6 +42,7 @@ export class PlayerService {
   }
 
   stop(): Observable<any> {
+    this.isPlaying = false;
     return this.modifyPlayback(from(this.player.stop()));
   }
 
@@ -74,6 +77,10 @@ export class PlayerService {
     }
 
     return null;
+  }
+
+  getIsCurrentlyPlaying(): boolean {
+    return this.isPlaying;
   }
 
   setTitle(): void {

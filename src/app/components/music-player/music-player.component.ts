@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
+import { LibraryService } from 'src/app/services/library.service';
+
+const artworkWidth = 50;
+const artworkHeight = 50;
 
 @Component({
   selector: 'app-music-player',
@@ -7,7 +11,7 @@ import { PlayerService } from 'src/app/services/player.service';
   styleUrls: ['./music-player.component.css']
 })
 export class MusicPlayerComponent implements OnInit {
-  constructor(private playerService: PlayerService) { }
+  constructor(private playerService: PlayerService, private libraryService: LibraryService) { }
 
   ngOnInit() { }
 
@@ -32,7 +36,45 @@ export class MusicPlayerComponent implements OnInit {
   }
 
   getCurrentSongInfo(): string {
-    let currentInfo = this.playerService.getCurrentlyPlayingSongInfo();
-    return (currentInfo) ? currentInfo : 'Welcome to Apple Music Share';
+    let defaultTitle = 'Welcome to Apple Music Share';
+
+    if(this.playerService.getIsCurrentlyPlaying()) {
+      let currentInfo = this.playerService.getCurrentlyPlayingSongInfo();
+      return (currentInfo) ? currentInfo : defaultTitle;
+    } else {
+      return defaultTitle;
+    }
+  }
+
+  getCurrentSongArtworkUrl(): string {
+    if(this.getIsCurrentlyPlaying()) {
+      let currentSong = this.getCurrentSong();
+
+      if(currentSong) {
+        let artworkUrl = currentSong.artworkURL;
+
+        if(artworkUrl) {
+          return this.libraryService.getValidArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
+        }
+      }
+    }
+
+    return '';
+  }
+
+  getIsCurrentlyPlaying(): boolean {
+    return this.playerService.getIsCurrentlyPlaying();
+  }
+
+  getCurrentSong(): any {
+    return this.playerService.getCurrentlyPlayingSong();
+  }
+
+  getArtworkWidth(): number {
+    return artworkWidth;
+  }
+
+  getArtworkHeight(): number {
+    return artworkHeight;
   }
 }

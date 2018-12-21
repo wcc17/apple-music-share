@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MusicKitService } from 'src/app/services/music-kit.service';
 import { PlayerService } from 'src/app/services/player.service';
 import { Subscription } from 'rxjs';
 import { LibraryService } from 'src/app/services/library.service';
+
+const artworkWidth = 50;
+const artworkHeight = 50;
 
 @Component({
   selector: 'app-songs',
@@ -10,6 +12,7 @@ import { LibraryService } from 'src/app/services/library.service';
   styleUrls: ['./songs.component.css']
 })
 export class SongsComponent implements OnInit, OnDestroy {
+
   private songs: any[] = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
   private subscriptions: Subscription = new Subscription();
 
@@ -28,8 +31,12 @@ export class SongsComponent implements OnInit, OnDestroy {
       this.libraryService.getSongs( startIndex ).subscribe( songs => {
         if(songs.length) {
           this.songs = this.songs.concat(songs);
-          //TODO: need to handle loading to show the user if songs are still being loaded
-          this.getAllSongs(startIndex + this.libraryService.getSongRequestLimit());
+
+          //TODO: remove the length check
+          if(songs.length < 100) {
+            //TODO: need to handle loading to show the user if songs are still being loaded
+            this.getAllSongs(startIndex + this.libraryService.getSongRequestLimit());
+          }
       }
     }));
   }
@@ -63,4 +70,15 @@ export class SongsComponent implements OnInit, OnDestroy {
     return roundedMinutes + ':' + roundedSecondsString;
   }
 
+  getValidArtworkUrl(artworkUrl: string): string {
+    return this.libraryService.getValidArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
+  }
+
+  getArtworkWidth(): number {
+    return artworkWidth;
+  }
+
+  getArtworkHeight(): number {
+    return artworkHeight;
+  }
 }
