@@ -1,6 +1,13 @@
 <div id="musicPlayer">
   <div id="playerSongInfo">
-    {{ getCurrentSongInfo() }}
+    <img 
+      id="currentTrackArtworkImg" 
+      *ngIf="getIsCurrentlyPlaying()"
+      height="{{getArtworkHeight()}}"
+      width="{{getArtworkWidth()}}"
+      [src]="getCurrentSongArtworkUrl()"
+    />
+    <span>{{ getCurrentSongInfo() }}</span>
   </div>
   <div id="playerControls">
     <button (click)='onPrevious()'>prev</button>
