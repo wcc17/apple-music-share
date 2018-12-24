@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
-import { LibraryService } from 'src/app/services/library.service';
+import { MusicKitService } from 'src/app/services/music-kit.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
@@ -11,7 +11,7 @@ const artworkHeight = 50;
   styleUrls: ['./music-player.component.css']
 })
 export class MusicPlayerComponent implements OnInit {
-  constructor(private playerService: PlayerService, private libraryService: LibraryService) { }
+  constructor(private playerService: PlayerService, private musicKitService: MusicKitService) { }
 
   ngOnInit() { }
 
@@ -46,6 +46,8 @@ export class MusicPlayerComponent implements OnInit {
     }
   }
 
+  //TODO: for some reason, apple won't return the proper artwork for songs that were uploaded to icloud
+  //TODO: need a placeholder artwork for songs who's artwork won't load
   getCurrentSongArtworkUrl(): string {
     if(this.getIsCurrentlyPlaying()) {
       let currentSong = this.getCurrentSong();
@@ -54,7 +56,7 @@ export class MusicPlayerComponent implements OnInit {
         let artworkUrl = currentSong.artworkURL;
 
         if(artworkUrl) {
-          return this.libraryService.getValidArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
+          return this.musicKitService.getFormattedArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
         }
       }
     }

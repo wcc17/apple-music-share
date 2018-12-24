@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
 import { Subscription } from 'rxjs';
+import { MusicKitService } from 'src/app/services/music-kit.service';
 import { LibraryService } from 'src/app/services/library.service';
 
 const artworkWidth = 50;
@@ -16,7 +17,9 @@ export class SongsComponent implements OnInit, OnDestroy {
   private songs: any[] = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private libraryService: LibraryService, private playerService: PlayerService) { }
+  constructor(private musicKitService: MusicKitService, 
+    private playerService: PlayerService, 
+    private libraryService: LibraryService) { }
 
   ngOnInit(): void {
     this.getAllSongs(0);
@@ -71,7 +74,7 @@ export class SongsComponent implements OnInit, OnDestroy {
   }
 
   getValidArtworkUrl(artworkUrl: string): string {
-    return this.libraryService.getValidArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
+    return this.musicKitService.getFormattedArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
   }
 
   getArtworkWidth(): number {

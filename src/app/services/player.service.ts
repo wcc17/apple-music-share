@@ -9,9 +9,12 @@ import { MusicKitService } from './music-kit.service';
 })
 export class PlayerService {
   private player: any = this.musicKitService.getPlayer();
-  private isPlaying: boolean = false;
+  private isPlaying: boolean = false; //TODO: rmoeve when playStateChange listener is implemented
+  private currentSong: any = null;
 
-  constructor(private musicKitService: MusicKitService, private titleService: Title) { }
+  constructor(private musicKitService: MusicKitService, private titleService: Title) { 
+    musicKitService.addMediaItemDidChangeEventListener(this.mediaItemDidChange.bind(this));
+  }
   
   playSong(songs: any[], index: number): Observable<any> {
     if(songs) {
@@ -55,30 +58,26 @@ export class PlayerService {
   }
 
   getCurrentlyPlayingSongInfo(): string {
-    let currentSong = this.getCurrentlyPlayingSong();
-
-    if(currentSong) {
-      return this.getSongName(currentSong) 
-        + ' - ' + this.getArtistName(currentSong)
-        + ' - ' + this.getAlbumName(currentSong);
+    if(this.currentSong) {
+      return this.getSongName(this.currentSong) 
+        + ' - ' + this.getArtistName(this.currentSong)
+        + ' - ' + this.getAlbumName(this.currentSong);
     }
   }
 
   getCurrentlyPlayingSong(): any {
-    let currentPosition = this.player.queue.position;
-    let currentItem = this.player.queue.items[currentPosition];
-    return currentItem;
+    return this.currentSong;
   }
 
   getCurrentlyPlayingSongId(): any {
-    let currentSong = this.getCurrentlyPlayingSong();
-    if(currentSong) {
-      return currentSong.container.id;
+    if(this.currentSong) {
+      return this.currentSong.container.id;
     }
 
     return null;
   }
 
+  //TODO: remove or change when playStateChange listener is implemented
   getIsCurrentlyPlaying(): boolean {
     return this.isPlaying;
   }
@@ -90,6 +89,10 @@ export class PlayerService {
     }
 
     this.titleService.setTitle(title);
+  }
+
+  mediaItemDidChange(event: any): void {
+    this.currentSong = event.item;
   }
 
   private getArtistName(song: any) {

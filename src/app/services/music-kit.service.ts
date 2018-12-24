@@ -12,7 +12,7 @@ export class MusicKitService {
 
   constructor() { 
     MusicKit.configure({
-      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTQ0OTc3MTU0LCJleHAiOjE1NDU1ODE5NTR9.HXKv30tNE9GoCD5QmVHu9WCdrGOHp1zJohziWugfkixTmEBfsa745CM-3Ovq6eVLSvmFNX-lvIs8hQ4ZGfLwhA',
+      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTQ1NjgxMTkxLCJleHAiOjE1NDYyODU5OTF9.HRP6oazJIiky785-QTLeAIzDekcgfgfY2PKrqKf8rAj6nAe08A-sfBLsrx7YApp3IZn5bxzstpDigANAlTJxDg',
       app: { 
         name: 'Apple Music Share',
         build: '1.0'
@@ -44,5 +44,17 @@ export class MusicKitService {
 
   getLibrary(): any {
     return this.musicKit.api.library;
+  }
+
+  getFormattedArtworkUrl(artworkUrl: string, width: number, height: number): string {
+    return MusicKit.formatArtworkURL( { 'url': artworkUrl }, height, width );
+  }
+
+  getFormattedMilliseconds(milliseconds: number) {
+    return MusicKit.formattedMilliseconds(milliseconds);
+  }
+
+  addMediaItemDidChangeEventListener(eventListener: any) {
+    this.musicKit.addEventListener( MusicKit.Events.mediaItemDidChange, eventListener );
   }
 }
