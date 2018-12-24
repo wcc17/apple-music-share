@@ -15,13 +15,6 @@ export class LibraryService {
     return from(this.library.songs( null , { limit: this.songRequestLimit, offset: startIndex }));
   }
 
-  getValidArtworkUrl(artworkUrl: string, width: number, height: number): string {
-    artworkUrl = artworkUrl.replace('{w}', width.toString());
-    artworkUrl = artworkUrl.replace('{h}', height.toString());
-
-    return artworkUrl;
-  }
-
   getSongRequestLimit(): number {
     return this.songRequestLimit;
   }
