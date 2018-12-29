@@ -1,29 +1,15 @@
-.music-controls {
-    width: 70px;
-    max-width: 70px;
+#playerDiv {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 5px;
 }
 
 #artworkCol {
     max-width: 50px;
     max-height: 50px;
-    /* border: 1px solid black; */
-    
-    display: table; /** keeps the song info from overlapping with the artwork **/
-}
-
-#infoCol {
-    /* border: 1px solid black; */
-}
-
-#infoRow {
-    margin-top: 5px;
+    margin-right: 5px;
 }
 
 #controlsRow {
     margin-top: 5px;
-    position: fixed;
-}
-
-#playerDiv {
-    border: 1px solid black;
 }

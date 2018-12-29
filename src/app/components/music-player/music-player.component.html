@@ -1,4 +1,4 @@
-<div id="playerDiv">
+<div id="playerDiv" class="border rounded">
   <div id="infoRow" class="row justify-content-md-center">
     
     <div id="artworkCol" class="col">
@@ -7,32 +7,33 @@
           height="{{getArtworkHeight()}}"
           width="{{getArtworkWidth()}}"
           [src]="getCurrentSongArtworkUrl()"
+          class="border rounded"
         />
     </div>
 
     <div id="infoCol" class="col">
-      <div class="row">
-        <div [hidden]='getIsCurrentlyPlaying()'>
-          <span>{{ getDefaultTitle() }}</span>
-          <br/>
-          <br/>
-        </div>
+      <div [hidden]='getIsCurrentlyPlaying()'>
+        <span>{{ getDefaultTitle() }}</span>
+        <br/>
+        <br/>
+      </div>
 
-        <div [hidden]='!getIsCurrentlyPlaying()'>
-          <span>{{ getCurrentlyPlayingSongTitle() }}</span>
-          <br/>
-          <span>{{ getCurrentlyPlayingSongArtist() }} - {{ getCurrentlyPlayingSongAlbum()}}</span>
-        </div>
+      <div [hidden]='!getIsCurrentlyPlaying()'>
+        <span>{{ getCurrentlyPlayingSongTitle() }}</span>
+        <br/>
+        <span>{{ getCurrentlyPlayingSongArtist() }} - {{ getCurrentlyPlayingSongAlbum()}}</span>
       </div>
     </div>
 
   </div>
 
   <div id="controlsRow" class="row">
+    <div class="col">
       <button (click)='onPrevious()' class="music-controls">prev</button>
       <button (click)='onPlay()' class="music-controls">play</button>
       <button (click)='onPause()' class="music-controls">pause</button>
       <button (click)='onStop()' class="music-controls">stop</button>
       <button (click)='onNext()' class="music-controls">next</button>
+    </div>
   </div>
 </div> 

@@ -12,3 +12,8 @@
 #contentCol {
     overflow-y: scroll;
 }
+
+app-music-player {
+    width: 100%;
+    text-align: center;
+}
