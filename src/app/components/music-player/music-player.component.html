@@ -1,19 +1,38 @@
-<div id="musicPlayer">
-  <div id="playerSongInfo">
-    <img 
-      id="currentTrackArtworkImg" 
-      *ngIf="getIsCurrentlyPlaying()"
-      height="{{getArtworkHeight()}}"
-      width="{{getArtworkWidth()}}"
-      [src]="getCurrentSongArtworkUrl()"
-    />
-    <span>{{ getCurrentSongInfo() }}</span>
+<div id="playerDiv">
+  <div id="infoRow" class="row justify-content-md-center">
+    
+    <div id="artworkCol" class="col">
+        <img 
+          id="currentTrackArtworkImg" 
+          height="{{getArtworkHeight()}}"
+          width="{{getArtworkWidth()}}"
+          [src]="getCurrentSongArtworkUrl()"
+        />
+    </div>
+
+    <div id="infoCol" class="col">
+      <div class="row">
+        <div [hidden]='getIsCurrentlyPlaying()'>
+          <span>{{ getDefaultTitle() }}</span>
+          <br/>
+          <br/>
+        </div>
+
+        <div [hidden]='!getIsCurrentlyPlaying()'>
+          <span>{{ getCurrentlyPlayingSongTitle() }}</span>
+          <br/>
+          <span>{{ getCurrentlyPlayingSongArtist() }} - {{ getCurrentlyPlayingSongAlbum()}}</span>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div id="playerControls">
-    <button (click)='onPrevious()'>prev</button>
-    <button (click)='onPlay()'>play</button>
-    <button (click)='onPause()'>pause</button>
-    <button (click)='onStop()'>stop</button>
-    <button (click)='onNext()'>next</button>
+
+  <div id="controlsRow" class="row">
+      <button (click)='onPrevious()' class="music-controls">prev</button>
+      <button (click)='onPlay()' class="music-controls">play</button>
+      <button (click)='onPause()' class="music-controls">pause</button>
+      <button (click)='onStop()' class="music-controls">stop</button>
+      <button (click)='onNext()' class="music-controls">next</button>
   </div>
-</div>
+</div> 

@@ -59,14 +59,32 @@ export class PlayerService {
 
   getCurrentlyPlayingSongInfo(): string {
     if(this.currentSong) {
-      return this.getSongName(this.currentSong) 
-        + ' - ' + this.getArtistName(this.currentSong)
-        + ' - ' + this.getAlbumName(this.currentSong);
+      return this.currentSong.attributes.name
+        + ' - ' + this.currentSong.attributes.artistName
+        + ' - ' + this.currentSong.attributes.albumName;
     }
   }
 
   getCurrentlyPlayingSong(): any {
     return this.currentSong;
+  }
+  
+  getCurrentlyPlayingSongTitle(): string {
+    if(this.currentSong) {
+      return this.currentSong.attributes.name;
+    }
+  }
+
+  getCurrentlyPlayingSongArtist(): string {
+    if(this.currentSong) {
+      return this.currentSong.attributes.artistName;
+    }
+  }
+
+  getCurrentlyPlayingSongAlbum(): string {
+    if(this.currentSong) {
+      return this.currentSong.attributes.albumName;
+    }
   }
 
   getCurrentlyPlayingSongId(): any {
@@ -94,17 +112,4 @@ export class PlayerService {
   mediaItemDidChange(event: any): void {
     this.currentSong = event.item;
   }
-
-  private getArtistName(song: any) {
-    return song.attributes.artistName;
-  }
-
-  private getAlbumName(song: any) {
-    return song.attributes.albumName;
-  }
-
-  private getSongName(song: any) {
-    return song.attributes.name;
-  }
-
 }

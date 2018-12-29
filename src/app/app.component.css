@@ -6,7 +6,6 @@
 
 #playerControlsRow {
     border: 1px solid blue;
-    background: grey;
     height: 10vh; /** must add up to 100 when added to the max-height in #navRow **/
 }
 

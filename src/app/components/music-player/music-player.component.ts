@@ -4,6 +4,7 @@ import { MusicKitService } from 'src/app/services/music-kit.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
+const defaultTitle = 'Welcome to Apple Music Share';
 
 @Component({
   selector: 'app-music-player',
@@ -35,15 +36,16 @@ export class MusicPlayerComponent implements OnInit {
     this.playerService.skipToNext().subscribe();
   }
 
-  getCurrentSongInfo(): string {
-    let defaultTitle = 'Welcome to Apple Music Share';
+  getCurrentlyPlayingSongTitle(): string {
+    return this.playerService.getCurrentlyPlayingSongTitle();
+  }
 
-    if(this.playerService.getIsCurrentlyPlaying()) {
-      let currentInfo = this.playerService.getCurrentlyPlayingSongInfo();
-      return (currentInfo) ? currentInfo : defaultTitle;
-    } else {
-      return defaultTitle;
-    }
+  getCurrentlyPlayingSongArtist(): string {
+    return this.playerService.getCurrentlyPlayingSongArtist();
+  }
+
+  getCurrentlyPlayingSongAlbum(): string {
+    return this.playerService.getCurrentlyPlayingSongAlbum();
   }
 
   //TODO: for some reason, apple won't return the proper artwork for songs that were uploaded to icloud
@@ -78,5 +80,9 @@ export class MusicPlayerComponent implements OnInit {
 
   getArtworkHeight(): number {
     return artworkHeight;
+  }
+
+  getDefaultTitle(): string {
+    return defaultTitle;
   }
 }
