@@ -1,18 +1,29 @@
-#musicPlayer {
-    text-align: center;
+.music-controls {
+    width: 70px;
+    max-width: 70px;
 }
 
-#playerSongInfo {
-    padding: 5px;
-    margin-top: 20px;
+#artworkCol {
+    max-width: 50px;
+    max-height: 50px;
+    /* border: 1px solid black; */
+    
+    display: table; /** keeps the song info from overlapping with the artwork **/
 }
 
-#playerControls {
+#infoCol {
+    /* border: 1px solid black; */
+}
+
+#infoRow {
+    margin-top: 5px;
+}
+
+#controlsRow {
+    margin-top: 5px;
+    position: fixed;
+}
+
+#playerDiv {
     border: 1px solid black;
-    padding: 5px;
-    display: inline-block;
-}
-
-#currentTrackArtworkImg {
-    margin-right: 5px;
 }
