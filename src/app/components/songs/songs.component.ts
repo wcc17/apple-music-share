@@ -36,7 +36,7 @@ export class SongsComponent implements OnInit, OnDestroy {
           this.songs = this.songs.concat(songs);
 
           //TODO: remove the length check
-          if(songs.length < 100) {
+          if(this.songs.length < 100) {
             //TODO: need to handle loading to show the user if songs are still being loaded
             this.getAllSongs(startIndex + this.libraryService.getSongRequestLimit());
           }
@@ -77,6 +77,7 @@ export class SongsComponent implements OnInit, OnDestroy {
     return this.musicKitService.getFormattedArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
   }
 
+  //TODO: this should be in a base class
   getArtworkWidth(): number {
     return artworkWidth;
   }
