@@ -21,6 +21,12 @@ export class LibraryService {
       'recently-added', null, { limit: this.collectionRequestLimit, offset: startIndex }));
   }
 
+  getAlbum(albumId: string): Observable<any> {
+    //TODO: doc also mentions this.musicKit.api.album instead of using the library's album
+    //TODO: albums from library will have type: library-album
+    return from(this.library.album(albumId));
+  }
+
   getSongRequestLimit(): number {
     return this.songRequestLimit;
   }
