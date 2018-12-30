@@ -8,6 +8,7 @@ import { AlbumsComponent } from './components/albums/albums.component';
 import { SongsComponent } from './components/songs/songs.component';
 import { SearchComponent } from './components/search/search.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { SingleAlbumComponent } from './components/single-album/single-album.component';
 
 const routes: Routes = [
   { path: 'queue', component: QueueComponent },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'songs', component: SongsComponent },
   { path: 'search', component: SearchComponent },
   { path: 'settings', component: SettingsComponent },
+  { path: 'album/:id', component: SingleAlbumComponent },
   { path: '**', redirectTo: '/queue', pathMatch: 'full'}
 ];
 

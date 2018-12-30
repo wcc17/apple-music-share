@@ -1,0 +1,8 @@
+.jumbotron {
+    background-size: cover;
+    max-height: 35vh;
+}
+
+#thumbnailImage {
+    max-height: 350px;
+}

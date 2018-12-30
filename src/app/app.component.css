@@ -11,4 +11,5 @@
 
 #contentCol {
     overflow-y: scroll;
+    padding: 0px;
 }

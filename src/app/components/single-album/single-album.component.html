@@ -1,0 +1,13 @@
+<div>
+    <div class="jumbotron jumbotron-fluid" [style.backgroundImage]="'url('+ getArtworkUrl() +')'">
+      <div class="row">
+        <div class="col">
+          <img id="thumbnailImage" class="border img-fluid" [src]="getArtworkUrl()" />
+        </div>
+        <div id="contentCol" class="col">
+          <h1 *ngIf="this.album">{{ this.album.attributes.name }}</h1>
+          <h4 *ngIf="this.album">{{ this.album.attributes.artistName }} </h4>
+        </div>
+      </div>
+    </div>
+</div>

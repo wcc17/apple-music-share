@@ -14,6 +14,7 @@ import { AlbumsComponent } from './components/albums/albums.component';
 import { SongsComponent } from './components/songs/songs.component';
 import { SearchComponent } from './components/search/search.component';
 import { SettingsComponent } from './components/settings/settings.component';
+import { SingleAlbumComponent } from './components/single-album/single-album.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -30,7 +31,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     AlbumsComponent,
     SongsComponent,
     SearchComponent,
-    SettingsComponent
+    SettingsComponent,
+    SingleAlbumComponent
   ],
   imports: [
     BrowserModule,
