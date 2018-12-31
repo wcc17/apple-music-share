@@ -1,0 +1,16 @@
+<!--TODO: I want to center the image within the jumbotron eventually-->
+<div class="jumbotron jumbotron-fluid border border-dark" [style.backgroundImage]="'url('+ getArtworkUrl() +')'">
+    <div class="row">
+      <div id="thumbnailCol" class="col-2">
+        <img id="thumbnailImage" class="border img-fluid" [src]="getArtworkUrl()" />
+      </div>
+      <div id="contentCol" class="col-9">
+        <h1>{{ this.collection.attributes.name }}</h1>
+        <h4 *ngIf="this.collection.attributes.artistName">{{ this.collection.attributes.artistName }} </h4>
+      </div>
+    </div>
+  </div>
+  <div>
+    <!--TODO: Needs to wait on the page to load first! This entire page does-->
+    <app-list-song [songs]="this.songs" [showArtwork]="this.showSongArtwork"></app-list-song>
+  </div>

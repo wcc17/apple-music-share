@@ -1,0 +1,13 @@
+<table class="table table-hover table-sm">
+  <thead>
+    <tr>
+      <th>Artist</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let artist of artists; let i = index" 
+        (click)="onArtistSelected(i)">
+      <td>{{artist.attributes.name}}</td>
+    </tr>
+  </tbody>
+</table>

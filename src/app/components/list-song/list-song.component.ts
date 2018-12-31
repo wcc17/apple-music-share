@@ -1,47 +1,29 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
 import { Subscription } from 'rxjs';
 import { MusicKitService } from 'src/app/services/music-kit.service';
-import { LibraryService } from 'src/app/services/library.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
 
 @Component({
-  selector: 'app-songs',
-  templateUrl: './songs.component.html',
-  styleUrls: ['./songs.component.css']
+  selector: 'app-list-song',
+  templateUrl: './list-song.component.html',
+  styleUrls: ['./list-song.component.css'],
 })
-export class SongsComponent implements OnInit, OnDestroy {
+export class ListSongComponent implements OnInit, OnDestroy {
 
-  private songs: any[] = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
+  @Input() songs: any[];
+  @Input() showArtwork: boolean;
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private musicKitService: MusicKitService, 
-    private playerService: PlayerService, 
-    private libraryService: LibraryService) { }
+  constructor(private playerService: PlayerService, private musicKitService: MusicKitService) { }
 
-  ngOnInit(): void {
-    this.getAllSongs(0);
+  ngOnInit() {
   }
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-  }
-
-  getAllSongs(startIndex: number): void {
-    this.subscriptions.add( 
-      this.libraryService.getSongs( startIndex ).subscribe( songs => {
-        if(songs.length) {
-          this.songs = this.songs.concat(songs);
-
-          //TODO: remove the length check
-          if(this.songs.length < 100) {
-            //TODO: need to handle loading to show the user if songs are still being loaded
-            this.getAllSongs(startIndex + this.libraryService.getSongRequestLimit());
-          }
-      }
-    }));
   }
 
   onSongSelected(index): void {
@@ -77,7 +59,6 @@ export class SongsComponent implements OnInit, OnDestroy {
     return this.musicKitService.getFormattedArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
   }
 
-  //TODO: this should be in a base class
   getArtworkWidth(): number {
     return artworkWidth;
   }
@@ -85,4 +66,5 @@ export class SongsComponent implements OnInit, OnDestroy {
   getArtworkHeight(): number {
     return artworkHeight;
   }
+
 }

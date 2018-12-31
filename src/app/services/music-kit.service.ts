@@ -12,7 +12,7 @@ export class MusicKitService {
 
   constructor() { 
     MusicKit.configure({
-      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTQ1NjgxMTkxLCJleHAiOjE1NDYyODU5OTF9.HRP6oazJIiky785-QTLeAIzDekcgfgfY2PKrqKf8rAj6nAe08A-sfBLsrx7YApp3IZn5bxzstpDigANAlTJxDg',
+      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTQ2Mjg2MDk5LCJleHAiOjE1NDY4OTA4OTl9.khkVMZDe6gjYzAV8mO4Bt8LvIlb6DtSq4qrrVXZ7sNdOzyZEYaO_6Ct1uG4YG9bII1BViQcWNyEv4Y8BqnwaUA',
       app: { 
         name: 'Apple Music Share',
         build: '1.0'
@@ -44,6 +44,10 @@ export class MusicKitService {
 
   getLibrary(): any {
     return this.musicKit.api.library;
+  }
+
+  getApi(): any {
+    return this.musicKit.api;
   }
 
   getFormattedArtworkUrl(artworkUrl: string, width: number, height: number): string {

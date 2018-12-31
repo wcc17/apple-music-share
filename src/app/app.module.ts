@@ -9,12 +9,18 @@ import { ContentComponent } from './components/content/content.component';
 import { QueueComponent } from './components/queue/queue.component';
 import { RecentlyAddedComponent } from './components/recently-added/recently-added.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
-import { ArtistsComponent } from './components/artists/artists.component';
-import { AlbumsComponent } from './components/albums/albums.component';
-import { SongsComponent } from './components/songs/songs.component';
 import { SearchComponent } from './components/search/search.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SingleAlbumComponent } from './components/single-album/single-album.component';
+import { ListSongComponent } from './components/list-song/list-song.component';
+import { LibrarySongsComponent } from './components/library-songs/library-songs.component';
+import { LibraryAlbumsComponent } from './components/library-albums/library-albums.component';
+import { ListAlbumComponent } from './components/list-album/list-album.component';
+import { SinglePlaylistComponent } from './components/single-playlist/single-playlist.component';
+import { SingleCollectionComponent } from './components/single-collection/single-collection.component';
+import { LibraryArtistsComponent } from './components/library-artists/library-artists.component';
+import { ListArtistComponent } from './components/list-artist/list-artist.component';
+import { SingleArtistComponent } from './components/single-artist/single-artist.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -27,12 +33,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     QueueComponent,
     RecentlyAddedComponent,
     PlaylistsComponent,
-    ArtistsComponent,
-    AlbumsComponent,
-    SongsComponent,
     SearchComponent,
     SettingsComponent,
-    SingleAlbumComponent
+    SingleAlbumComponent,
+    ListSongComponent,
+    LibrarySongsComponent,
+    ListAlbumComponent,
+    LibraryAlbumsComponent,
+    SinglePlaylistComponent,
+    SingleCollectionComponent,
+    LibraryArtistsComponent,
+    ListArtistComponent,
+    SingleArtistComponent
   ],
   imports: [
     BrowserModule,

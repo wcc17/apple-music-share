@@ -1,0 +1,9 @@
+<div *ngIf="this.artist">
+  <div class="jumbotron jumbotron-fluid border border-dark">
+    <h1>{{ this.artist.attributes.name }}</h1>
+  </div>
+  <div>
+    <!--TODO: Needs to wait on the page to load first! This entire page does-->
+    <app-list-album *ngIf="this.artist" [albums]="this.artist.relationships.albums.data"></app-list-album>
+  </div>
+</div>
