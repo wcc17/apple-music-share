@@ -1,0 +1,13 @@
+.jumbotron {
+    background-size: cover;
+    max-height: 35vh;
+    overflow: hidden;
+}
+
+#thumbnailImage {
+    max-height: 350px;
+}
+
+#thumbnailCol {
+    margin-left: 20px;
+}

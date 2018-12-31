@@ -11,6 +11,8 @@ import { MusicKitService } from 'src/app/services/music-kit.service';
 })
 export class SingleAlbumComponent implements OnInit, OnDestroy {
 
+  //TODO: its very obvious that there is not an animation for when the page is loading
+
   albumId: string;
   album: any;
   private subscriptions: Subscription = new Subscription();
@@ -26,34 +28,20 @@ export class SingleAlbumComponent implements OnInit, OnDestroy {
       this.route.params.subscribe((params) => { this.initializeAlbum(params['id'])})
     );
   }
-
+ 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
-
 
   initializeAlbum(albumId: string): void {
     this.albumId = albumId;
     
     this.subscriptions.add(
-      this.libraryService.getAlbum(albumId).subscribe(album => {
+      this.libraryService.getLibraryAlbum(albumId).subscribe(album => {
         if(album) {
           this.album = album;
         }
       }
     ));
-  }
-
-  getValidArtworkUrl(width: number, height: number, url: string): string {
-    return this.musicKitService.getFormattedArtworkUrl(url, width, height);
-  }
-
-  getArtworkUrl(): string {
-    if(this.album) {
-      let width: number = this.album.attributes.artwork.width;
-      let height: number = this.album.attributes.artwork.height;
-      let url: string = this.album.attributes.artwork.url;
-      return this.getValidArtworkUrl(width, height, url);
-    }
   }
 }

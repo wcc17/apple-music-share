@@ -1,13 +1,5 @@
-<div>
-    <div class="jumbotron jumbotron-fluid border border-dark" [style.backgroundImage]="'url('+ getArtworkUrl() +')'">
-      <div class="row">
-        <div id="thumbnailCol" class="col-2">
-          <img id="thumbnailImage" class="border img-fluid" [src]="getArtworkUrl()" />
-        </div>
-        <div id="contentCol" class="col-9">
-          <h1 *ngIf="this.album">{{ this.album.attributes.name }}</h1>
-          <h4 *ngIf="this.album">{{ this.album.attributes.artistName }} </h4>
-        </div>
-      </div>
-    </div>
-</div>
+<app-single-collection 
+  *ngIf="this.album"
+  [showSongArtwork]="false"
+  [collection]="this.album">
+</app-single-collection>
