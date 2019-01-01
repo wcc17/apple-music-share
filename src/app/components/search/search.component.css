@@ -1,0 +1,12 @@
+#searchContainer {
+    margin: 40px;
+}
+
+#searchInput {
+    margin-bottom: 20px;
+}
+
+app-list-collection {
+    margin: 50px;
+    padding: 50px;
+}

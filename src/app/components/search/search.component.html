@@ -1,3 +1,38 @@
-<p>
-  search works!
-</p>
+<div id="searchContainer">
+  <div id="searchInputContainer">
+    <input 
+      type="text" 
+      class="form-control" 
+      placeholder="Search" 
+      id="searchInput"
+      (keyup)="searchTerm.next($event.target.value)"/>
+  </div>
+  
+  <div id="searchAccordionContainer">
+    <ngb-accordion [closeOthers]="true" activeIds="songPanel">
+      <ngb-panel id="songPanel" title="Songs" *ngIf="this.songResults.length > 0">
+        <ng-template ngbPanelContent>
+          <app-list-song *ngIf="this.songResults" [songs]="this.songResults" [showArtwork]="true" [showHeaders]="false"></app-list-song>
+        </ng-template>
+      </ngb-panel>
+    
+      <ngb-panel id="artistPanel" title="Artists" *ngIf="this.artistResults.length > 0">
+        <ng-template ngbPanelContent>
+          <app-list-artist *ngIf="this.artistResults" [artists]="this.artistResults" [showHeaders]="false"></app-list-artist>
+        </ng-template>
+      </ngb-panel>
+    
+      <ngb-panel id="albumPanel" title="Albums" *ngIf="this.albumResults.length > 0">
+        <ng-template ngbPanelContent>
+          <app-list-collection *ngIf="this.albumResults" [collections]="this.albumResults"></app-list-collection>
+        </ng-template>
+      </ngb-panel>
+    
+      <ngb-panel id="playlistPanel" title="Playlists" *ngIf="this.playlistResults.length > 0">
+        <ng-template ngbPanelContent>
+            <app-list-collection *ngIf="this.playlistResults" [collections]="this.playlistResults"></app-list-collection>
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+  </div>
+</div>

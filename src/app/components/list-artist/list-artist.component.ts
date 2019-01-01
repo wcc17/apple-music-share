@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class ListArtistComponent implements OnInit {
 
   @Input() artists: any[];
+  @Input() showHeaders: boolean;
 
   constructor(private router: Router) { }
 

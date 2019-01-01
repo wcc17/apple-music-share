@@ -41,11 +41,6 @@ export class LibraryService {
     return from(this.library.artist(artistId, { include: 'albums' } ));
   }
 
-  //TODO: not sure about this
-  getArtist(artistId: string): Observable<any> {
-    return from(this.musicKitService.getApi().artist(artistId, { include: 'albums' }));
-  }
-
   getPlaylist(id: string): Observable<any> {
     return from(this.library.playlist(id));
   }

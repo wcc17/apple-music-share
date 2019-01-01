@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LibraryService } from 'src/app/services/library.service';
 
+//TODO: rename to LibraryPlaylistsComponent
 @Component({
   selector: 'app-playlists',
   templateUrl: './playlists.component.html',
