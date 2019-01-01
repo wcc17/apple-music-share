@@ -19,7 +19,7 @@ export class ListArtistComponent implements OnInit {
 
   onArtistSelected(index: number): void {
     let artist = this.artists[index];
-    this.router.navigate(['artist', artist.id]);
+    this.router.navigate(['artist', artist.type, artist.id]);
   }
 
 }

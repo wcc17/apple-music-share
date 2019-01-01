@@ -12,7 +12,7 @@ export class LibraryService {
 
   constructor(private musicKitService: MusicKitService) { }
 
-  getSongs(startIndex: number): Observable<any> {
+  getLibrarySongs(startIndex: number): Observable<any> {
     return from(this.library.songs(null , { limit: this.libraryRequestLimit, offset: startIndex }));
   }
 
@@ -41,7 +41,7 @@ export class LibraryService {
     return from(this.library.artist(artistId, { include: 'albums' } ));
   }
 
-  getPlaylist(id: string): Observable<any> {
+  getLibraryPlaylist(id: string): Observable<any> {
     return from(this.library.playlist(id));
   }
 

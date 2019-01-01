@@ -5,11 +5,24 @@
       class="form-control" 
       placeholder="Search" 
       id="searchInput"
-      (keyup)="searchTerm.next($event.target.value)"/>
+      (keyup)="searchOnKeyUp($event.target.value)"/>
+  </div>
+
+  <div id="searchTypeButtonGroup" class="btn-group" role="group">
+    <button id="libraryButton" type="button" class="btn border search-button" 
+        [ngClass]="this.isActiveButton('library')"
+        (click)="this.changeButton('library')">
+      Library
+    </button>
+    <button id="appleMusicButton" type="button" class="btn border search-button" 
+        [ngClass]="this.isActiveButton('apple')"
+        (click)="this.changeButton('apple')">
+      Apple Music
+    </button>
   </div>
   
   <div id="searchAccordionContainer">
-    <ngb-accordion [closeOthers]="true" activeIds="songPanel">
+    <ngb-accordion [closeOthers]="true">
       <ngb-panel id="songPanel" title="Songs" *ngIf="this.songResults.length > 0">
         <ng-template ngbPanelContent>
           <app-list-song *ngIf="this.songResults" [songs]="this.songResults" [showArtwork]="true" [showHeaders]="false"></app-list-song>

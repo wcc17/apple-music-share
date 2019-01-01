@@ -16,6 +16,14 @@ export class ApiService {
     return from(this.musicKitService.getApi().artist(artistId, { include: 'albums' }));
   }
 
+  getAlbum(albumId: string ): Observable<any> {
+    return from(this.musicKitService.getApi().album(albumId));
+  }
+
+  getPlaylist(playlistId: string): Observable<any> {
+    return from(this.musicKitService.getApi().playlist(playlistId));
+  }
+
   //https://alligator.io/angular/real-time-search-angular-rxjs/
   search(searchQueries: Observable<string>, searchType: string): Observable<any> {
     return searchQueries
@@ -27,10 +35,12 @@ export class ApiService {
   }
 
   private searchForType(searchQuery: string, searchType: string): Observable<any> {
-    if(searchType === 'library') {
-      return this.searchLibrary(searchQuery);
-    } else {
-      return this.searchAppleMusic(searchQuery);
+    if(searchQuery !== '') {
+      if(searchType === 'library') {
+        return this.searchLibrary(searchQuery);
+      } else {
+        return this.searchAppleMusic(searchQuery);
+      }
     }
   }
 
