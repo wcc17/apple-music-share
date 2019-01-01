@@ -24,7 +24,7 @@ export class LibrarySongsComponent implements OnInit, OnDestroy {
 
   getAllSongs(startIndex: number): void {
     this.subscriptions.add( 
-      this.libraryService.getSongs( startIndex ).subscribe( songs => {
+      this.libraryService.getLibrarySongs( startIndex ).subscribe( songs => {
         if(songs.length) {
           this.songs = this.songs.concat(songs);
 

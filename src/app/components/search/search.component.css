@@ -10,3 +10,11 @@ app-list-collection {
     margin: 50px;
     padding: 50px;
 }
+
+.search-button {
+    width: 200px;
+}
+
+#searchTypeButtonGroup {
+    margin-bottom: 20px;
+}

@@ -19,18 +19,26 @@ export class ListCollectionComponent implements OnInit {
   onCollectionSelected(index: number): void {
     let collection = this.collections[index];
 
-    if(collection.type === 'library-playlists') {
-      this.router.navigate(['playlist', collection.id]);
-    } else if(collection.type === 'library-albums') {
-      this.router.navigate(['album', collection.id]);
+    let route: string = '';
+
+    if(collection.type === 'library-playlists' || collection.type === 'playlists') {
+      route = 'playlist';
+    } else if(collection.type === 'library-albums' || collection.type === 'albums') {
+      route = 'album';
     }
+
+    this.router.navigate([route, collection.type, collection.id]);
   }
 
   getValidArtworkUrl(index: number): string {
-    let artworkUrl: string = this.collections[index].attributes.artwork.url;
-    let artworkWidth: number = this.collections[index].attributes.artwork.width;
-    let artworkHeight: number = this.collections[index].attributes.artwork.height;
-    return this.musicKitService.getFormattedArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
+    if(this.collections[index].attributes.artwork) {
+      let artworkUrl: string = this.collections[index].attributes.artwork.url;
+      let artworkWidth: number = this.collections[index].attributes.artwork.width;
+      let artworkHeight: number = this.collections[index].attributes.artwork.height;
+      return this.musicKitService.getFormattedArtworkUrl(artworkUrl, artworkWidth, artworkHeight);
+    } else {
+      //TODO: need to return a placeholder image
+    }
   }
 
 }

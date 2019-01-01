@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { LibraryService } from 'src/app/services/library.service';
 import { MusicKitService } from 'src/app/services/music-kit.service';
+import { ApiService } from 'src/app/services/api.service';
 
 @Component({
   selector: 'app-single-album',
@@ -20,12 +21,12 @@ export class SingleAlbumComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute, 
     private libraryService: LibraryService, 
-    private musicKitService: MusicKitService
+    private apiService: ApiService
   ) { }
 
   ngOnInit() {
     this.subscriptions.add(
-      this.route.params.subscribe((params) => { this.initializeAlbum(params['id'])})
+      this.route.params.subscribe((params) => { this.initializeAlbum(params['id'], params['type'])})
     );
   }
  
@@ -33,15 +34,31 @@ export class SingleAlbumComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  initializeAlbum(albumId: string): void {
+  initializeAlbum(albumId: string, type: string): void {
     this.albumId = albumId;
     
-    this.subscriptions.add(
-      this.libraryService.getLibraryAlbum(albumId).subscribe(album => {
-        if(album) {
-          this.album = album;
-        }
-      }
-    ));
+    if(type === 'library-albums') {
+      this.subscriptions.add(this.getLibraryAlbum());
+    } else if(type === 'albums') {
+      this.subscriptions.add(this.getAlbum());
+    }
+  }
+
+  private getLibraryAlbum(): Subscription {
+    return this.libraryService.getLibraryAlbum(this.albumId).subscribe(album => {
+      this.setAlbum(album);
+    });
+  }
+
+  private getAlbum(): Subscription {
+    return this.apiService.getAlbum(this.albumId).subscribe(album => {
+      this.setAlbum(album);
+    });
+  }
+
+  private setAlbum(album: any): void {
+    if(album) {
+      this.album = album;
+    }
   }
 }

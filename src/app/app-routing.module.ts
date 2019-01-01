@@ -21,9 +21,9 @@ const routes: Routes = [
   { path: 'songs', component: LibrarySongsComponent },
   { path: 'search', component: SearchComponent },
   { path: 'settings', component: SettingsComponent },
-  { path: 'album/:id', component: SingleAlbumComponent },
-  { path: 'playlist/:id', component: SinglePlaylistComponent },
-  { path: 'artist/:id', component: SingleArtistComponent },
+  { path: 'album/:type/:id', component: SingleAlbumComponent },
+  { path: 'playlist/:type/:id', component: SinglePlaylistComponent },
+  { path: 'artist/:type/:id', component: SingleArtistComponent },
   { path: '**', redirectTo: '/queue', pathMatch: 'full'}
 ];
 
