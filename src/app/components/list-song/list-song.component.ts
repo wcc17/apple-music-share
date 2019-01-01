@@ -15,6 +15,7 @@ export class ListSongComponent implements OnInit, OnDestroy {
 
   @Input() songs: any[];
   @Input() showArtwork: boolean;
+  @Input() showHeaders: boolean;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private playerService: PlayerService, private musicKitService: MusicKitService) { }

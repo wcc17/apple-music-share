@@ -4,6 +4,6 @@
   </div>
   <div>
     <!--TODO: Needs to wait on the page to load first! This entire page does-->
-    <app-list-album *ngIf="this.artist" [albums]="this.artist.relationships.albums.data"></app-list-album>
+    <app-list-collection *ngIf="this.artist" [collections]="this.artist.relationships.albums.data"></app-list-collection>
   </div>
 </div>

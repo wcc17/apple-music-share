@@ -11,16 +11,16 @@ import { RecentlyAddedComponent } from './components/recently-added/recently-add
 import { PlaylistsComponent } from './components/playlists/playlists.component';
 import { SearchComponent } from './components/search/search.component';
 import { SettingsComponent } from './components/settings/settings.component';
-import { SingleAlbumComponent } from './components/single-album/single-album.component';
-import { ListSongComponent } from './components/list-song/list-song.component';
 import { LibrarySongsComponent } from './components/library-songs/library-songs.component';
 import { LibraryAlbumsComponent } from './components/library-albums/library-albums.component';
-import { ListAlbumComponent } from './components/list-album/list-album.component';
+import { LibraryArtistsComponent } from './components/library-artists/library-artists.component';
+import { SingleAlbumComponent } from './components/single-album/single-album.component';
 import { SinglePlaylistComponent } from './components/single-playlist/single-playlist.component';
 import { SingleCollectionComponent } from './components/single-collection/single-collection.component';
-import { LibraryArtistsComponent } from './components/library-artists/library-artists.component';
-import { ListArtistComponent } from './components/list-artist/list-artist.component';
 import { SingleArtistComponent } from './components/single-artist/single-artist.component';
+import { ListSongComponent } from './components/list-song/list-song.component';
+import { ListCollectionComponent } from './components/list-collection/list-collection.component';
+import { ListArtistComponent } from './components/list-artist/list-artist.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -38,7 +38,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SingleAlbumComponent,
     ListSongComponent,
     LibrarySongsComponent,
-    ListAlbumComponent,
+    ListCollectionComponent,
     LibraryAlbumsComponent,
     SinglePlaylistComponent,
     SingleCollectionComponent,

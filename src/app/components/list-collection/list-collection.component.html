@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2 mt-4" 
+         *ngFor="let collection of collections; let i = index">
+        <div class="card h-100">
+            <img class="card-img-top border" [src]="getValidArtworkUrl(i)" (click)="onCollectionSelected(i)" />
+            <div class="card-body">
+                <p class="card-text">
+                    <span class="text-primary">{{ collection.attributes.name }}</span><br/>
+                    <span class="text-secondary">{{ collection.attributes.artistName }}</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
