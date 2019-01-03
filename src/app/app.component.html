@@ -1,17 +1,23 @@
 <div id="mainContainer" class="container-fluid">
   
-  <div id="navRow" class="row">
-    <div id="navigationCol" class="col-2" style="border: 1px solid black">
-      <app-navigation></app-navigation>
+  <div *ngIf="this.isUserAuthorized()">
+    <div id="navRow" class="row">
+      <div id="navigationCol" class="col-2" style="border: 1px solid black">
+        <app-navigation></app-navigation>
+      </div>
+      <div id="contentCol" class="col-10">
+        <router-outlet></router-outlet>
+      </div>
     </div>
-    <div id="contentCol" class="col-10">
-      <router-outlet></router-outlet>
+    
+    <div id="playerControlsRow" class="row">
+      <div class="col" align="center">
+        <app-music-player></app-music-player>
+      </div>
     </div>
   </div>
-  
-  <div id="playerControlsRow" class="row">
-    <div class="col" align="center">
-      <app-music-player></app-music-player>
-    </div>
+
+  <div *ngIf="!this.isUserAuthorized()">
+    <app-authentication></app-authentication>
   </div>
 </div>

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MusicKitService } from './services/music-kit.service';
 
 @Component({
   selector: 'app-root',
@@ -8,9 +9,13 @@ import { Component } from '@angular/core';
 export class AppComponent {
   
   //reserve the constructor for simple initilization
-  constructor() { }
+  constructor(private musicKitService: MusicKitService) { }
 
   //use this for real stuff 
   ngOnInit() {
+  }
+
+  isUserAuthorized(): boolean {
+    return this.musicKitService.isUserAuthorized();
   }
 }
