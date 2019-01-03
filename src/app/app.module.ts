@@ -21,6 +21,7 @@ import { SingleArtistComponent } from './components/single-artist/single-artist.
 import { ListSongComponent } from './components/list-song/list-song.component';
 import { ListCollectionComponent } from './components/list-collection/list-collection.component';
 import { ListArtistComponent } from './components/list-artist/list-artist.component';
+import { AuthenticationComponent } from './components/authentication/authentication.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
@@ -44,7 +45,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     SingleCollectionComponent,
     LibraryArtistsComponent,
     ListArtistComponent,
-    SingleArtistComponent
+    SingleArtistComponent,
+    AuthenticationComponent
   ],
   imports: [
     BrowserModule,

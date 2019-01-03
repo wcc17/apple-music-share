@@ -1,0 +1,18 @@
+#authContainer {
+    margin-top: 20%;
+}
+
+#welcomeText {
+    margin-top: 10px;
+}
+
+#instructionText {
+    margin-top: 5px;
+    margin-right: 2%;
+}
+
+#loginButton {
+    margin-top: 15px;
+    margin-right: 3%;
+    margin-bottom: 10px;
+}

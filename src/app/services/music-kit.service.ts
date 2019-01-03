@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 
 declare var MusicKit: any;
 
@@ -21,16 +21,24 @@ export class MusicKitService {
 
     //ensure user is authorized
     this.musicKit = MusicKit.getInstance();
-    this.authorizeUser();
+    this.isAuthorized = this.musicKit.isAuthorized;
   }
 
-  authorizeUser(): boolean {
+  authorizeUser(): void {
     if(!this.isAuthorized) {
-      this.musicKit.authorize().then( () => {
+      from(this.musicKit.authorize()).subscribe(() => {
         this.isAuthorized = true;
-      });
+      })
     }
+  }
 
+  unauthorizeUser(): void {
+    from(this.musicKit.unauthorize()).subscribe(() => {
+      this.isAuthorized = false;
+    })
+  }
+
+  isUserAuthorized(): boolean {
     return this.isAuthorized;
   }
 
