@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { LibraryService } from 'src/app/services/library.service';
+import { Song } from 'src/app/model/song';
 
 @Component({
   selector: 'app-library-songs',
@@ -9,7 +10,7 @@ import { LibraryService } from 'src/app/services/library.service';
 })
 export class LibrarySongsComponent implements OnInit, OnDestroy {
   
-  private songs: any[] = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
+  private songs: Song[] = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
   private subscriptions: Subscription = new Subscription();
 
   constructor(private libraryService: LibraryService) { }
