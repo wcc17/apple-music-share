@@ -2,6 +2,9 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
 import { Subscription } from 'rxjs';
 import { MusicKitService } from 'src/app/services/music-kit.service';
+import { Song } from 'src/app/model/song';
+import { UserService } from 'src/app/services/user.service';
+import { QueueService } from 'src/app/services/queue.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
@@ -13,12 +16,15 @@ const artworkHeight = 50;
 })
 export class ListSongComponent implements OnInit, OnDestroy {
 
-  @Input() songs: any[];
+  @Input() songs: Song[];
   @Input() showArtwork: boolean;
   @Input() showHeaders: boolean;
   private subscriptions: Subscription = new Subscription();
 
-  constructor(private playerService: PlayerService, private musicKitService: MusicKitService) { }
+  constructor(private playerService: PlayerService, 
+    private musicKitService: MusicKitService, 
+    private userService: UserService,
+    private queueService: QueueService) { }
 
   ngOnInit() {
   }
@@ -28,7 +34,11 @@ export class ListSongComponent implements OnInit, OnDestroy {
   }
 
   onSongSelected(index): void {
-    this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
+    //TODO: check if in standalone music player mode so that old functionality can still be used
+    // this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
+    let selectedSong: Song = this.songs[index];
+    selectedSong.requestedBy = this.userService.getUser();
+    this.queueService.queueSong(selectedSong);
   }
 
   isSelectedSong(index: number): boolean {
