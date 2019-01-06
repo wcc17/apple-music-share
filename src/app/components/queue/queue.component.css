@@ -1,3 +1,8 @@
 #queueContainer {
     overflow: hidden;
 }
+
+#notConnectedContainer {
+    overflow: hidden;
+    margin: 10px;
+}

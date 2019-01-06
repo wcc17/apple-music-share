@@ -13,11 +13,54 @@
       </div>
     </div>
 
-    <div id="userNameSettingsContainer" class="row">
-      <div class="col">
-        <h4>Current Username: {{ this.getUserName() }}</h4>
-        <input type="text" class="form-control" placeholder="Username" id="nameInput"/>
-        <button id="nameSubmitButton" type="button" class="btn btn-primary border" (click)='setUserName()'>Submit</button>
+    <div *ngIf="!this.getIsSocketConnectionActive()" id="initSocketSettingsContainer">
+      <div id="joinExistingRoomContainer" class="row">
+        <div class="col">
+          <h4>Join a room</h4>
+          <h4 *ngIf="this.hasErrorJoiningRoom()" class="text-danger">Error joining room - room ID does not exist</h4>
+          <input type="text" class="form-control" placeholder="Room ID" id="roomIdInput"/>
+          <button id="roomSubmitButton" type="button" class="btn btn-primary border" (click)='connectAndJoinRoom()'>Submit</button>
+        </div>
       </div>
-  </div>
-</div>
+
+      <div id="createRoomContainer" class="row">
+        <div class="col">
+          <h4>Create a new room </h4>
+          <button id="createRoomSubmitButton" type="button" class="btn btn-primary border" (click)='createAndJoinRoom()'>Create</button>
+        </div>
+      </div>
+
+    </div>
+
+    <div *ngIf="this.getIsSocketConnectionActive()" id="socketSettingsContainer">
+      <div id="roomIdContainer" class="row">
+        <div class="col">
+          <h4>Current Room ID: {{ this.getRoomId() }}</h4>
+        </div>
+      </div>
+
+      <div id="userNameSettingsContainer" class="row">
+        <div class="col">
+          <h4>Current Username: {{ this.getUserName() }}</h4>
+          <input type="text" class="form-control" placeholder="Username" id="nameInput"/>
+          <button id="nameSubmitButton" type="button" class="btn btn-primary border" (click)='setUserName()'>Submit</button>
+        </div>
+      </div>
+  
+      <div id="testContainer" class="row">
+        <div class="col">
+          <h4>Send a test message via socket.io</h4>
+          <input type="text" class="form-control" placeholder="A test message" id="testMessageInput"/>
+          <button id="sendMessageButton" type="button" class="btn btn-primary border" (click)='this.sendTestMessage()'>Send Test Message</button>
+  
+          <div class="row">
+              <div class="col-12" *ngFor="let message of this.getMessages(); let i = index">
+                  <span>
+                      {{ message.from.name }}: {{ message.debugMessage }}
+                  </span>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div> 
