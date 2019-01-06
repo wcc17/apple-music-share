@@ -35,4 +35,12 @@ export class UserService {
     
     this.socketService.sendNotification({ previousUserName: oldName }, Action.RENAME, this.currentUser);
   }
+
+  getRoomId(): number {
+    return this.currentUser.roomId;
+  }
+
+  setRoomId(roomId: number): void {
+    this.currentUser.roomId = roomId;
+  }
 }

@@ -1,18 +1,12 @@
-<div id="queueContainer">
-    <button id="sendMessageButton" type="button" class="btn btn-primary border" (click)='this.sendTestMessage()'>Send Test Message</button>
-
-    <div class="row">
-        <div class="col-12" *ngFor="let message of this.getMessages(); let i = index">
-            <span>
-                {{ message.from.name }}: {{ message.debugMessage }}
-            </span>
-        </div>
-    </div>
-    
+<div *ngIf="this.isSocketConnectionActive()" id="queueContainer">
     <app-list-song [songs]="this.getCurrentQueue()" 
         [showArtwork]="true" 
         [showHeaders]="true" 
         [showRequestedBy]="true"
         [allowSongSelection]="false">
     </app-list-song>
+</div>
+
+<div *ngIf="!this.isSocketConnectionActive()" id="notConnectedContainer">
+    <h3>To begin using the shared queue, go to settings and join or create a room</h3>
 </div>

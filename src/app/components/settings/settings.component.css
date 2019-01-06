@@ -16,3 +16,27 @@
 #nameSubmitButton {
     margin-top: 10px;
 }
+
+#testContainer {
+    margin-top: 25px;
+}
+
+#sendMessageButton {
+    margin-top: 10px;
+}
+
+#initSocketSettingsContainer {
+    margin-top: 25px;
+}
+
+#createRoomContainer {
+    margin-top: 25px;
+}
+
+#roomSubmitButton {
+    margin-top: 10px;
+}
+
+#roomIdContainer {
+    margin-top: 25px;
+}
