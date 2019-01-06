@@ -22,9 +22,17 @@ export class SocketService {
   }
 
   public onMessage(): Observable<Message> {
+    return this.onListen('message');
+  }
+
+  public onQueue(): Observable<Message> {
+    return this.onListen('queue');
+  }
+
+  public onListen(name: string): Observable<Message> {
     return new Observable<Message>(observer => {
-      this.socket.on('message', (data: Message) => observer.next(data));
-    });
+      this.socket.on(name, (data: Message) => observer.next(data));
+    })
   }
 
   public onEvent(event: Event): Observable<any> {
@@ -33,6 +41,11 @@ export class SocketService {
     });
   }
 
+  public send(message: Message, event: string): void {
+    this.socket.emit(event, message);
+  }
+
+  //TODO: this isn't really being used on server side
   public sendNotification(params: any, action: Action, user: User): void {
     let message: Message;
 
@@ -51,10 +64,6 @@ export class SocketService {
       };
     }
 
-    this.send(message);
-  }
-  
-  public send(message: Message): void {
-    this.socket.emit('message', message);
+    this.send(message, 'notification');
   }
 }

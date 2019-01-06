@@ -5,7 +5,8 @@
         <th>Name</th>
         <th>Time</th>
         <th>Artist</th>
-        <th>Album</th>
+        <th>Album</th> 
+        <th *ngIf="this.showRequestedBy">Requested By</th>
       </tr>
     </thead>
     <tbody>
@@ -23,6 +24,7 @@
         <td>{{getMinutesAndSeconds(song.attributes.durationInMillis)}}</td>
         <td>{{song.attributes.artistName}}</td>
         <td>{{song.attributes.albumName}}</td>
+        <td *ngIf="this.showRequestedBy">{{song.requestedBy.name}}</td>
       </tr>
     </tbody>
   </table>
