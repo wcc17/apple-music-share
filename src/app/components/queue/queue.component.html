@@ -1,11 +1,18 @@
-<button id="sendMessageButton" type="button" class="btn btn-primary border" (click)='this.sendTestMessage()'>Send Test Message</button>
+<div id="queueContainer">
+    <button id="sendMessageButton" type="button" class="btn btn-primary border" (click)='this.sendTestMessage()'>Send Test Message</button>
 
-<div class="row">
-    <div class="col-12" *ngFor="let message of this.getMessages(); let i = index">
-        <span>
-            {{ message.from.name }}: {{ message.debugMessage }}
-        </span>
+    <div class="row">
+        <div class="col-12" *ngFor="let message of this.getMessages(); let i = index">
+            <span>
+                {{ message.from.name }}: {{ message.debugMessage }}
+            </span>
+        </div>
     </div>
+    
+    <app-list-song [songs]="this.getCurrentQueue()" 
+        [showArtwork]="true" 
+        [showHeaders]="true" 
+        [showRequestedBy]="true"
+        [allowSongSelection]="false">
+    </app-list-song>
 </div>
-
-<app-list-song [songs]="this.songs" [showArtwork]="true" [showHeaders]="true"></app-list-song>

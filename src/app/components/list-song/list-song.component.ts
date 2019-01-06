@@ -19,6 +19,8 @@ export class ListSongComponent implements OnInit, OnDestroy {
   @Input() songs: Song[];
   @Input() showArtwork: boolean;
   @Input() showHeaders: boolean;
+  @Input() showRequestedBy: boolean;
+  @Input() allowSongSelection: boolean;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private playerService: PlayerService, 
@@ -34,11 +36,13 @@ export class ListSongComponent implements OnInit, OnDestroy {
   }
 
   onSongSelected(index): void {
-    //TODO: check if in standalone music player mode so that old functionality can still be used
-    // this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
-    let selectedSong: Song = this.songs[index];
-    selectedSong.requestedBy = this.userService.getUser();
-    this.queueService.queueSong(selectedSong);
+    if(this.allowSongSelection) {
+      //TODO: check if in standalone music player mode so that old functionality can still be used
+      // this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
+      let selectedSong: Song = this.songs[index];
+      selectedSong.requestedBy = this.userService.getUser();
+      this.queueService.queueSong(selectedSong);
+    }
   }
 
   isSelectedSong(index: number): boolean {

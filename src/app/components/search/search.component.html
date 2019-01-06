@@ -25,7 +25,13 @@
     <ngb-accordion [closeOthers]="true">
       <ngb-panel id="songPanel" title="Songs" *ngIf="this.songResults.length > 0">
         <ng-template ngbPanelContent>
-          <app-list-song *ngIf="this.songResults" [songs]="this.songResults" [showArtwork]="true" [showHeaders]="false"></app-list-song>
+          <app-list-song *ngIf="this.songResults" 
+            [songs]="this.songResults" 
+            [showArtwork]="true" 
+            [showHeaders]="false" 
+            [showRequestedBy]="false"
+            [allowSongSelection]="true">
+          </app-list-song>
         </ng-template>
       </ngb-panel>
     
