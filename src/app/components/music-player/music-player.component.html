@@ -27,7 +27,7 @@
 
   </div>
 
-  <div id="controlsRow" class="row">
+  <div id="controlsRow" class="row" *ngIf="this.getIsStandAloneAppMode()">
     <div class="col">
       <button (click)='onPrevious()' class="music-controls">prev</button>
       <button (click)='onPlay()' class="music-controls">play</button>

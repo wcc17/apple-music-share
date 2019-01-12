@@ -3,6 +3,8 @@ import { MusicKitService } from 'src/app/services/music-kit.service';
 import { UserService } from 'src/app/services/user.service';
 import { QueueService } from 'src/app/services/queue.service';
 import { Message } from 'src/app/model/message';
+import { ConfigService } from 'src/app/config.service';
+import { PlayerService } from 'src/app/services/player.service';
 
 @Component({
   selector: 'app-settings',
@@ -11,11 +13,19 @@ import { Message } from 'src/app/model/message';
 })
 export class SettingsComponent implements OnInit {
 
-  constructor(private musicKitService: MusicKitService, 
+  constructor(
+    private musicKitService: MusicKitService, 
     private userService: UserService,
-    private queueService: QueueService) { }
+    private queueService: QueueService,
+    private configService: ConfigService,
+    private playerService: PlayerService
+  ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    const standAloneAppCheckBox: HTMLElement = document.getElementById('appModeCheck');
+    const inputElement: HTMLInputElement = (<HTMLInputElement> standAloneAppCheckBox);
+    inputElement.checked = this.getIsStandAloneAppMode();
+  }
 
   connectAndJoinRoom(): void {
     const inputElement: HTMLElement = document.getElementById('roomIdInput');
@@ -64,6 +74,20 @@ export class SettingsComponent implements OnInit {
 
   getRoomId(): number {
     return this.userService.getRoomId();
+  }
+
+  toggleAppMode(event: any): void {
+    this.configService.setStandAloneAppMode(event.currentTarget.checked);
+
+    if(this.getIsStandAloneAppMode()) {
+      //TODO: disconnect the socket stuff, stop playing the shared queue music
+    } else {
+      this.playerService.stop();
+    }
+  }
+
+  getIsStandAloneAppMode(): boolean {
+    return this.configService.getStandAloneAppMode();
   }
 
 }

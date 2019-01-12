@@ -1,12 +1,20 @@
-<div *ngIf="this.isSocketConnectionActive()" id="queueContainer">
-    <app-list-song [songs]="this.getCurrentQueue()" 
-        [showArtwork]="true" 
-        [showHeaders]="true" 
-        [showRequestedBy]="true"
-        [allowSongSelection]="false">
-    </app-list-song>
+<div id="standAloneAppModeContainer" *ngIf="this.isStandAloneAppMode()">
+    <div class="instruction-message" *ngIf="!this.isSocketConnectionActive()">
+        <h3>To begin using the shared queue, go to settings and disable standalone app mode</h3>
+    </div>
 </div>
 
-<div *ngIf="!this.isSocketConnectionActive()" id="notConnectedContainer">
-    <h3>To begin using the shared queue, go to settings and join or create a room</h3>
+<div id="sharedAppModeContainer" *ngIf="!this.isStandAloneAppMode()">
+    <div id="queueContainer" *ngIf="this.isSocketConnectionActive()">
+        <app-list-song [songs]="this.getCurrentQueue()" 
+            [showArtwork]="true" 
+            [showHeaders]="true" 
+            [showRequestedBy]="true"
+            [allowSongSelection]="false">
+        </app-list-song>
+    </div>
+    
+    <div class="instruction-message" *ngIf="!this.isSocketConnectionActive()">
+        <h3>To begin using the shared queue, go to settings and join or create a room</h3>
+    </div>
 </div>

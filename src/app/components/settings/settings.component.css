@@ -1,42 +1,25 @@
-
 #settingsContainer {
     margin-top: 15px;
     margin-left: 5px;
     width: 90%;
 }
 
-#loginButton {
-    margin-top: 10px;
-}
-
-#userNameSettingsContainer {
+.setting-container {
     margin-top: 25px;
 }
 
-#nameSubmitButton {
+.setting-button {
     margin-top: 10px;
 }
 
-#testContainer {
-    margin-top: 25px;
-}
-
-#sendMessageButton {
-    margin-top: 10px;
+#appModeCheck {
+    margin-left: 1px;
 }
 
 #initSocketSettingsContainer {
-    margin-top: 25px;
+    margin-top: 55px;
 }
 
-#createRoomContainer {
-    margin-top: 25px;
-}
-
-#roomSubmitButton {
-    margin-top: 10px;
-}
-
-#roomIdContainer {
-    margin-top: 25px;
+#socketSettingsContainer {
+    margin-top: 55px;
 }
