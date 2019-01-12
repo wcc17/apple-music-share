@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../model/user';
+import { Message } from '../model/message';
 import { SocketService } from './socket.service';
-import { Action } from '../model/action';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,7 @@ export class UserService {
     let oldName: string = this.currentUser.name;
     this.currentUser.name = newUserName;
     
-    this.socketService.sendNotification({ previousUserName: oldName }, Action.RENAME, this.currentUser);
+    this.sendNameChangeNotification({ previousUserName: oldName }, this.currentUser);
   }
 
   getRoomId(): number {
@@ -42,5 +42,15 @@ export class UserService {
 
   setRoomId(roomId: number): void {
     this.currentUser.roomId = roomId;
+  }
+
+  //TODO: this isn't really being used on server side
+  public sendNameChangeNotification(params: any, user: User): void {
+    let message: Message = {
+      from: user,
+      content: params.previousUserName.toString() + ' changed their username to ' + user.name
+    };
+
+    this.socketService.send(message, 'message');
   }
 }

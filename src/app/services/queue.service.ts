@@ -4,19 +4,23 @@ import { UserService } from './user.service';
 import { Message } from '../model/message';
 import { Event } from '../model/event';
 import { Song } from '../model/song';
+import { RoomService } from './room.service';
+import { MessageService } from './message.service';
+import { User } from '../model/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class QueueService {
   private isConnected: boolean = false;
-  private hasJoinedRoom: boolean = false;
-  private errorJoiningRoom: boolean = false;
-
-  private messages: Message[] = [];
   private currentQueue: Song[] = [];
 
-  constructor(private socketService: SocketService, private userService: UserService) { }
+  constructor(
+    private socketService: SocketService, 
+    private userService: UserService,
+    private roomService: RoomService,
+    private messageService: MessageService
+  ) { }
 
   public initIoConnection(roomId?: number): void {
     if(!this.isConnected) {
@@ -24,34 +28,13 @@ export class QueueService {
 
       this.socketService.onMessage().subscribe((message: Message) => { this.handleMessage(message) });
       this.socketService.onQueue().subscribe((message: Message) => { this.handleQueueSong(message) });
-      this.socketService.onRoomJoined().subscribe((message: Message) => { this.handleRoomJoined(message) });
-      this.socketService.onRoomNotJoined().subscribe((message: Message) => { this.handleRoomNotJoined(message) });
-  
-      this.socketService.onEvent(Event.CONNECT).subscribe(() => {
-        console.log('connected ' + this.userService.getUserName());
-      });
-        
-      this.socketService.onEvent(Event.DISCONNECT).subscribe(() => {
-        console.log('disconnected ' + this.userService.getUserName());
-      });
+      this.socketService.onEvent(Event.CONNECT).subscribe(() => { this.handleConnectEvent() });
+      this.socketService.onEvent(Event.DISCONNECT).subscribe(() => { this.handleDisconnectEvent() });
 
       this.isConnected = true;
     }
 
-    this.joinRoom(roomId);
-  }
-
-  public joinRoom(roomId?: number): void {
-    if(!roomId) {
-      this.socketService.send({
-        from: this.userService.getUser()
-      }, 'create-room');
-    } else {
-      this.userService.setRoomId(roomId);
-      this.socketService.send({
-        from: this.userService.getUser()
-      }, 'join-room');
-    }
+    this.roomService.initRoomService(roomId);
   }
 
   public queueSong(song: Song): void {
@@ -82,6 +65,11 @@ export class QueueService {
     }, 'queue-request');
   }
 
+  private handleMessage(message: Message) {
+    this.messageService.pushMessage(message);
+    console.log(message.content);
+  }
+
   private handleQueueSong(message: Message) {
     this.handleMessage(message);
 
@@ -90,43 +78,22 @@ export class QueueService {
     }
   }
 
-  private handleMessage(message: Message) {
-    this.messages.push(message);
-    console.log(message.content);
+  private handleConnectEvent(): void {
+    let user: User = this.userService.getUser();
+    this.handleMessage(this.messageService.buildMessage('connected ' + user.name, user));
   }
 
-  private handleRoomJoined(message: Message) {
-    this.userService.setRoomId(message.from.roomId);
-    this.hasJoinedRoom = true;
-    this.errorJoiningRoom = false;
-
-    //get the current queue when first joining in case the user isn't the first one in the room
-    this.queueRequest();
+  private handleDisconnectEvent(): void {
+    let user: User = this.userService.getUser();
+    this.handleMessage(this.messageService.buildMessage('disconnected ' + user.name, user));
   }
-
-  private handleRoomNotJoined(message: Message) {
-    this.userService.setRoomId(null);
-    this.hasJoinedRoom = false;
-    this.errorJoiningRoom = true;
-  }
-
-
 
   public getCurrentQueue(): Song[] {
     return this.currentQueue;
   }
 
-  public getMessages(): Message[] {
-    return this.messages;
-  }
-
   public getIsConnected(): boolean {
     //the rest of the application only cares if both of these are true
-    return this.isConnected && this.hasJoinedRoom;
-  }
-
-  //TODO: this is a bad way to do this
-  public getErrorJoiningRoom(): boolean {
-    return this.errorJoiningRoom;
+    return this.isConnected && this.roomService.getHasJoinedRoom();
   }
 }

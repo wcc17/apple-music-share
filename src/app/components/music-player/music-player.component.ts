@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
 import { MusicKitService } from 'src/app/services/music-kit.service';
-import { ConfigService } from 'src/app/config.service';
+import { ConfigService } from 'src/app/services/config.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;

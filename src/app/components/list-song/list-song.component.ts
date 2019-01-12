@@ -5,7 +5,7 @@ import { MusicKitService } from 'src/app/services/music-kit.service';
 import { Song } from 'src/app/model/song';
 import { UserService } from 'src/app/services/user.service';
 import { QueueService } from 'src/app/services/queue.service';
-import { ConfigService } from 'src/app/config.service';
+import { ConfigService } from 'src/app/services/config.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;

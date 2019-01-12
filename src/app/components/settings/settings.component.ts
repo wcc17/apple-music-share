@@ -3,8 +3,10 @@ import { MusicKitService } from 'src/app/services/music-kit.service';
 import { UserService } from 'src/app/services/user.service';
 import { QueueService } from 'src/app/services/queue.service';
 import { Message } from 'src/app/model/message';
-import { ConfigService } from 'src/app/config.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { PlayerService } from 'src/app/services/player.service';
+import { RoomService } from 'src/app/services/room.service';
+import { MessageService } from 'src/app/services/message.service';
 
 @Component({
   selector: 'app-settings',
@@ -18,7 +20,9 @@ export class SettingsComponent implements OnInit {
     private userService: UserService,
     private queueService: QueueService,
     private configService: ConfigService,
-    private playerService: PlayerService
+    private playerService: PlayerService,
+    private roomService: RoomService,
+    private messageService: MessageService
   ) { }
 
   ngOnInit() {
@@ -65,11 +69,11 @@ export class SettingsComponent implements OnInit {
   }
 
   getMessages(): Message[] {
-    return this.queueService.getMessages();
+    return this.messageService.getMessages();
   }
 
   hasErrorJoiningRoom(): boolean {
-    return this.queueService.getErrorJoiningRoom();
+    return this.roomService.getErrorJoiningRoom();
   }
 
   getRoomId(): number {

@@ -2,10 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Message } from '../model/message';
 import { Event } from '../model/event';
-import { Action } from '../model/action';
 
 import * as socketIo from 'socket.io-client';
-import { User } from '../model/user';
 
 const SERVER_URL = 'http://localhost:8080';
 
@@ -55,27 +53,5 @@ export class SocketService {
 
   public send(message: Message, event: string): void {
     this.socket.emit(event, message);
-  }
-
-  //TODO: this isn't really being used on server side
-  public sendNotification(params: any, action: Action, user: User): void {
-    let message: Message;
-
-    if (action === Action.JOINED || action === Action.LEFT) {
-      message = {
-        from: user,
-        action: action
-      }
-    } else if (action === Action.RENAME) {
-      message = {
-        from: user,
-        action: action,
-        content: {
-          previousUsername: params.previousUsername
-        }
-      };
-    }
-
-    this.send(message, 'notification');
   }
 }
