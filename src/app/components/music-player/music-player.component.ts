@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
 import { MusicKitService } from 'src/app/services/music-kit.service';
+import { ConfigService } from 'src/app/config.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
@@ -12,7 +13,11 @@ const defaultTitle = 'Welcome to Apple Music Share';
   styleUrls: ['./music-player.component.css']
 })
 export class MusicPlayerComponent implements OnInit {
-  constructor(private playerService: PlayerService, private musicKitService: MusicKitService) { }
+  constructor(
+    private playerService: PlayerService, 
+    private musicKitService: MusicKitService,
+    private configService: ConfigService
+  ) { }
 
   ngOnInit() { }
 
@@ -84,5 +89,9 @@ export class MusicPlayerComponent implements OnInit {
 
   getDefaultTitle(): string {
     return defaultTitle;
+  }
+
+  getIsStandAloneAppMode(): boolean {
+    return this.configService.getStandAloneAppMode();
   }
 }

@@ -1,64 +1,85 @@
 <div id="settingsContainer" class="row">
   <div class="col">
 
-    <div class="row">
-      <div class="col">
-        <span id="instructionText" class="text-primary">Click the button to logout of Apple Music</span>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <button id="loginButton" type="button" class="btn btn-primary border" (click)='unauthorizeUser()'>Logout</button>
-      </div>
-    </div>
-
-    <div *ngIf="!this.getIsSocketConnectionActive()" id="initSocketSettingsContainer">
-      <div id="joinExistingRoomContainer" class="row">
+    <div id="logoutContainer">
+      <div class="row">
         <div class="col">
-          <h4>Join a room</h4>
-          <h4 *ngIf="this.hasErrorJoiningRoom()" class="text-danger">Error joining room - room ID does not exist</h4>
-          <input type="text" class="form-control" placeholder="Room ID" id="roomIdInput"/>
-          <button id="roomSubmitButton" type="button" class="btn btn-primary border" (click)='connectAndJoinRoom()'>Submit</button>
-        </div>
-      </div>
-
-      <div id="createRoomContainer" class="row">
-        <div class="col">
-          <h4>Create a new room </h4>
-          <button id="createRoomSubmitButton" type="button" class="btn btn-primary border" (click)='createAndJoinRoom()'>Create</button>
-        </div>
-      </div>
-
-    </div>
-
-    <div *ngIf="this.getIsSocketConnectionActive()" id="socketSettingsContainer">
-      <div id="roomIdContainer" class="row">
-        <div class="col">
-          <h4>Current Room ID: {{ this.getRoomId() }}</h4>
-        </div>
-      </div>
-
-      <div id="userNameSettingsContainer" class="row">
-        <div class="col">
-          <h4>Current Username: {{ this.getUserName() }}</h4>
-          <input type="text" class="form-control" placeholder="Username" id="nameInput"/>
-          <button id="nameSubmitButton" type="button" class="btn btn-primary border" (click)='setUserName()'>Submit</button>
+          <span class="text-primary">Click the button to logout of Apple Music</span>
         </div>
       </div>
   
-      <div id="testContainer" class="row">
+      <div class="row">
         <div class="col">
-          <h4>Send a test message via socket.io</h4>
-          <input type="text" class="form-control" placeholder="A test message" id="testMessageInput"/>
-          <button id="sendMessageButton" type="button" class="btn btn-primary border" (click)='this.sendTestMessage()'>Send Test Message</button>
+          <button id="loginButton" type="button" class="btn btn-primary border setting-button" (click)='unauthorizeUser()'>Logout</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="appModeContainer" class="setting-container" >
+      <div class="row">
+        <div class="col">
+          <label class="form-check-label" for="appModeCheck">
+            <span class="text-primary">Enable standalone music player</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+            <input class="form-check-input" type="checkbox" value="" id="appModeCheck" (change)="this.toggleAppMode($event)">
+        </div>
+      </div>
+
+    </div>
+
+    <div id="sharedQueueSettingsContainer" *ngIf="!this.getIsStandAloneAppMode()">
+      <div id="initSocketSettingsContainer" *ngIf="!this.getIsSocketConnectionActive()" class="setting-container">
+        <div id="joinExistingRoomContainer" class="row">
+          <div class="col">
+            <h4>Join a room</h4>
+            <h4 *ngIf="this.hasErrorJoiningRoom()" class="text-danger">Error joining room - room ID does not exist</h4>
+            <input type="text" class="form-control" placeholder="Room ID" id="roomIdInput"/>
+            <button id="roomSubmitButton" type="button" class="btn btn-primary border setting-button" (click)='connectAndJoinRoom()'>Submit</button>
+          </div>
+        </div>
   
-          <div class="row">
-              <div class="col-12" *ngFor="let message of this.getMessages(); let i = index">
-                  <span>
-                      {{ message.from.name }}: {{ message.debugMessage }}
-                  </span>
-              </div>
+        <div id="createRoomContainer" class="row setting-container">
+          <div class="col">
+            <h4>Create a new room </h4>
+            <button id="createRoomSubmitButton" type="button" class="btn btn-primary border" (click)='createAndJoinRoom()'>Create</button>
+          </div>
+        </div>
+  
+      </div>
+  
+      <div id="socketSettingsContainer" *ngIf="this.getIsSocketConnectionActive()" class="setting-container">
+        <div id="roomIdContainer" class="row setting-container">
+          <div class="col">
+            <h4>Current Room ID: {{ this.getRoomId() }}</h4>
+          </div>
+        </div>
+  
+        <div id="userNameSettingsContainer" class="row setting-container">
+          <div class="col">
+            <h4>Current Username: {{ this.getUserName() }}</h4>
+            <input type="text" class="form-control" placeholder="Username" id="nameInput"/>
+            <button id="nameSubmitButton" type="button" class="btn btn-primary border" (click)='setUserName()'>Submit</button>
+          </div>
+        </div>
+    
+        <div id="testContainer" class="row setting-container">
+          <div class="col">
+            <h4>Send a test message via socket.io</h4>
+            <input type="text" class="form-control" placeholder="A test message" id="testMessageInput"/>
+            <button id="sendMessageButton" type="button" class="btn btn-primary border setting-button" (click)='this.sendTestMessage()'>Send Test Message</button>
+    
+            <div class="row">
+                <div class="col-12" *ngFor="let message of this.getMessages(); let i = index">
+                    <span>
+                        {{ message.from.name }}: {{ message.debugMessage }}
+                    </span>
+                </div>
+            </div>
           </div>
         </div>
       </div>

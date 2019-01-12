@@ -12,7 +12,7 @@ export class MusicKitService {
 
   constructor() { 
     MusicKit.configure({
-      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTQ2Mjg2MDk5LCJleHAiOjE1NDY4OTA4OTl9.khkVMZDe6gjYzAV8mO4Bt8LvIlb6DtSq4qrrVXZ7sNdOzyZEYaO_6Ct1uG4YG9bII1BViQcWNyEv4Y8BqnwaUA',
+      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTQ3MzIwMDI3LCJleHAiOjE1NDc5MjQ4Mjd9.m6fhtz-UXNSj3sKdV1BzacTa-rTz-M7juVzboQJZTxvISQEfMn-33LprgsQ2LgICG5woFHTeCywHQnWY-aiqtg',
       app: { 
         name: 'Apple Music Share',
         build: '1.0'

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { QueueService } from 'src/app/services/queue.service';
 import { Song } from 'src/app/model/song';
+import { ConfigService } from 'src/app/config.service';
 
 @Component({
   selector: 'app-queue',
@@ -8,7 +9,7 @@ import { Song } from 'src/app/model/song';
   styleUrls: ['./queue.component.css']
 })
 export class QueueComponent implements OnInit {
-  constructor(private queueService: QueueService) { }
+  constructor(private queueService: QueueService, private configService: ConfigService) { }
 
   ngOnInit() {
   }
@@ -19,5 +20,9 @@ export class QueueComponent implements OnInit {
 
   isSocketConnectionActive(): boolean {
     return this.queueService.getIsConnected();
+  }
+
+  isStandAloneAppMode(): boolean {
+    return this.configService.getStandAloneAppMode();
   }
 }

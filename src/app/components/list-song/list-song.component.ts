@@ -5,6 +5,7 @@ import { MusicKitService } from 'src/app/services/music-kit.service';
 import { Song } from 'src/app/model/song';
 import { UserService } from 'src/app/services/user.service';
 import { QueueService } from 'src/app/services/queue.service';
+import { ConfigService } from 'src/app/config.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
@@ -26,7 +27,9 @@ export class ListSongComponent implements OnInit, OnDestroy {
   constructor(private playerService: PlayerService, 
     private musicKitService: MusicKitService, 
     private userService: UserService,
-    private queueService: QueueService) { }
+    private queueService: QueueService,
+    private configService: ConfigService
+  ) { }
 
   ngOnInit() {
   }
@@ -37,11 +40,13 @@ export class ListSongComponent implements OnInit, OnDestroy {
 
   onSongSelected(index): void {
     if(this.allowSongSelection) {
-      //TODO: check if in standalone music player mode so that old functionality can still be used
-      // this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
-      let selectedSong: Song = this.songs[index];
-      selectedSong.requestedBy = this.userService.getUser();
-      this.queueService.queueSong(selectedSong);
+      if(this.configService.getStandAloneAppMode()) {
+        this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
+      } else {
+        let selectedSong: Song = this.songs[index];
+        selectedSong.requestedBy = this.userService.getUser();
+        this.queueService.queueSong(selectedSong);
+      }
     }
   }
 
