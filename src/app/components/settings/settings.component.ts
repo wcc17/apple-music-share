@@ -35,6 +35,7 @@ export class SettingsComponent implements OnInit {
     const inputElement: HTMLElement = document.getElementById('roomIdInput');
     const inputValue: string = (<HTMLInputElement> inputElement).value;
 
+    //TODO: if we can't parse a number from the input value, stop here and show an error
     this.queueService.initIoConnection(Number.parseInt(inputValue));
   }
 
@@ -65,7 +66,7 @@ export class SettingsComponent implements OnInit {
     const inputElement: HTMLElement = document.getElementById('testMessageInput');
     const inputValue: string = (<HTMLInputElement> inputElement).value;
     
-    this.queueService.sendMessage(inputValue);
+    this.messageService.sendMessage(inputValue);
   }
 
   getMessages(): Message[] {

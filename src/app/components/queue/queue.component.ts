@@ -12,7 +12,11 @@ export class QueueComponent implements OnInit {
   constructor(private queueService: QueueService, private configService: ConfigService) { }
 
   ngOnInit() {
-    this.getCurrentQueue();
+    this.updateQueue();
+  }
+
+  updateQueue(): void {
+    return this.queueService.queueRequest();
   }
 
   getCurrentQueue(): Song[] {

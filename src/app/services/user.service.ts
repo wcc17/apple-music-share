@@ -44,7 +44,10 @@ export class UserService {
     this.currentUser.roomId = roomId;
   }
 
-  //TODO: this isn't really being used on server side
+  setIsLeader(isLeader: boolean): void {
+    this.currentUser.isLeader = isLeader;
+  }
+
   public sendNameChangeNotification(params: any, user: User): void {
     let message: Message = {
       from: user,

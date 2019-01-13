@@ -19,10 +19,6 @@ export class SocketService {
     this.socket = socketIo(SERVER_URL);
   }
 
-  public onCreateRoom(): Observable<Message> {
-    return this.onListen('create-room');
-  }
-
   public onRoomJoined(): Observable<Message> {
     return this.onListen('room-joined');
   }
