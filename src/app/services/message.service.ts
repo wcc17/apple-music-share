@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Message } from '../model/message';
 import { User } from '../model/user';
+import { SocketService } from './socket.service';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +10,25 @@ import { User } from '../model/user';
 export class MessageService {
   private messages: Message[] = [];
 
-  constructor() { }
+  constructor(
+    private socketService: SocketService,
+    private userService: UserService
+  ) { }
+
+  public initMessageService(): void {
+    this.socketService.onMessage().subscribe((message: Message) => { this.handleMessage(message) });
+  }
+
+  public sendMessage(message: string): void {
+    if (!message) {
+      return;
+    }
+
+    this.socketService.send({
+      from: this.userService.getUser(),
+      content: message,
+    }, 'message');
+  }
 
   public getMessages(): Message[] {
     return this.messages;
@@ -26,5 +46,10 @@ export class MessageService {
     message.debugMessage = content;
 
     return message;
+  }
+
+  public handleMessage(message: Message) {
+    this.pushMessage(message);
+    console.log(message.content);
   }
 }

@@ -8,10 +8,13 @@ import { RoomService } from './room.service';
 import { MessageService } from './message.service';
 import { User } from '../model/user';
 
+const UPDATE_TIME = 5000;
+
 @Injectable({
   providedIn: 'root'
 })
 export class QueueService {
+  private updateTimer: any;
   private isConnected: boolean = false;
   private currentQueue: Song[] = [];
 
@@ -26,7 +29,6 @@ export class QueueService {
     if(!this.isConnected) {
       this.socketService.initSocket();
 
-      this.socketService.onMessage().subscribe((message: Message) => { this.handleMessage(message) });
       this.socketService.onQueue().subscribe((message: Message) => { this.handleQueueSong(message) });
       this.socketService.onEvent(Event.CONNECT).subscribe(() => { this.handleConnectEvent() });
       this.socketService.onEvent(Event.DISCONNECT).subscribe(() => { this.handleDisconnectEvent() });
@@ -34,7 +36,23 @@ export class QueueService {
       this.isConnected = true;
     }
 
+    this.messageService.initMessageService();
     this.roomService.initRoomService(roomId);
+
+    this.updateTimer = setInterval(() => {
+      this.updateUser();
+    }, UPDATE_TIME);
+  }
+
+  private updateUser(): void {
+    console.log('updating user');
+
+    //just emit up to date user info to the server
+    if(this.userService.getUser()) {
+      this.socketService.send({
+        from: this.userService.getUser(),
+      }, 'update-user');
+    }
   }
 
   public queueSong(song: Song): void {
@@ -48,30 +66,14 @@ export class QueueService {
     }, 'queue');
   }
 
-  public sendMessage(message: string): void {
-    if (!message) {
-      return;
-    }
-
-    this.socketService.send({
-      from: this.userService.getUser(),
-      content: message,
-    }, 'message');
-  }
-
   public queueRequest(): void {
     this.socketService.send({
       from: this.userService.getUser(),
     }, 'queue-request');
   }
 
-  private handleMessage(message: Message) {
-    this.messageService.pushMessage(message);
-    console.log(message.content);
-  }
-
   private handleQueueSong(message: Message) {
-    this.handleMessage(message);
+    this.messageService.handleMessage(message);
 
     if(message && message.currentQueue) {
       this.currentQueue = message.currentQueue;
@@ -80,12 +82,12 @@ export class QueueService {
 
   private handleConnectEvent(): void {
     let user: User = this.userService.getUser();
-    this.handleMessage(this.messageService.buildMessage('connected ' + user.name, user));
+    this.messageService.handleMessage(this.messageService.buildMessage('connected ' + user.name, user));
   }
 
   private handleDisconnectEvent(): void {
     let user: User = this.userService.getUser();
-    this.handleMessage(this.messageService.buildMessage('disconnected ' + user.name, user));
+    this.messageService.handleMessage(this.messageService.buildMessage('disconnected ' + user.name, user));
   }
 
   public getCurrentQueue(): Song[] {

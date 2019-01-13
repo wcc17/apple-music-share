@@ -14,4 +14,5 @@ export class User {
     id?: number;
     name?: string;
     roomId?: number;
+    isLeader: boolean = false;
 }

@@ -38,21 +38,17 @@ export class RoomService {
     }
   }
 
-  private handleMessage(message: Message) {
-    this.messageService.pushMessage(message);
-    console.log(message.content);
-  }
-
   private handleRoomJoined(message: Message) {
-    this.handleMessage(message);
+    this.messageService.handleMessage(message);
 
+    this.userService.setIsLeader(message.from.isLeader);
     this.userService.setRoomId(message.from.roomId);
     this.hasJoinedRoom = true;
     this.errorJoiningRoom = false;
   }
 
   private handleRoomNotJoined(message: Message) {
-    this.handleMessage(message);
+    this.messageService.handleMessage(message);
     
     this.userService.setRoomId(null);
     this.hasJoinedRoom = false;
