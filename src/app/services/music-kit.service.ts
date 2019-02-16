@@ -12,7 +12,7 @@ export class MusicKitService {
 
   constructor() { 
     MusicKit.configure({
-      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTQ3MzIwMDI3LCJleHAiOjE1NDc5MjQ4Mjd9.m6fhtz-UXNSj3sKdV1BzacTa-rTz-M7juVzboQJZTxvISQEfMn-33LprgsQ2LgICG5woFHTeCywHQnWY-aiqtg',
+      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkFKUFoyU1E3U0YifQ.eyJpc3MiOiI0U1JFNTlGVzk0IiwiaWF0IjoxNTUwMzMwMzcwLCJleHAiOjE1NTA5MzUxNzB9.4dDu8jARY6UuFEufWKo1w0X4tEDxk1AJxH-UF2Kxoj88X_bMFUYkAg7J_uov4ds8W28DA4O5p8nToM7dat2aIg',
       app: { 
         name: 'Apple Music Share',
         build: '1.0'
@@ -68,5 +68,9 @@ export class MusicKitService {
 
   addMediaItemDidChangeEventListener(eventListener: any) {
     this.musicKit.addEventListener( MusicKit.Events.mediaItemDidChange, eventListener );
+  }
+
+  addPlaybackDidChangeEventListener(eventListener: any) {
+    this.musicKit.addEventListener( MusicKit.Events.playbackStateDidChange, eventListener );
   }
 }

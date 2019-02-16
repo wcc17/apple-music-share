@@ -40,7 +40,6 @@ export class MessageService {
 
   public buildMessage(content: string, user: User): Message {
     let message: Message = new Message();
-    message.content = content;
     message.from = new User();
     message.from.copyUser(user);
     message.debugMessage = content;
@@ -50,6 +49,6 @@ export class MessageService {
 
   public handleMessage(message: Message) {
     this.pushMessage(message);
-    console.log(message.content);
+    console.log(message.debugMessage);
   }
 }
