@@ -4,16 +4,31 @@ import { from, Observable } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 import { MusicKitService } from './music-kit.service';
 
+export enum PlaybackState {
+  NONE,
+  LOADING,
+  PLAYING,
+  PAUSED,
+  STOPPED,
+  ENDED,
+  SEEKING,
+  NULL,
+  WAITING,
+  STALLED,
+  COMPLETED
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PlayerService {
   private player: any = this.musicKitService.getPlayer();
-  private isPlaying: boolean = false; //TODO: rmoeve when playStateChange listener is implemented
   private currentSong: any = null;
+  private playbackState: PlaybackState = PlaybackState.NONE;
 
   constructor(private musicKitService: MusicKitService, private titleService: Title) { 
     musicKitService.addMediaItemDidChangeEventListener(this.mediaItemDidChange.bind(this));
+    musicKitService.addPlaybackDidChangeEventListener(this.playbackStateDidChange.bind(this));
   }
   
   playSong(songs: any[], index: number): Observable<any> {
@@ -36,7 +51,6 @@ export class PlayerService {
   }
 
   play(): Observable<any> {
-    this.isPlaying = true;
     return this.modifyPlayback(from(this.player.play()));
   }
 
@@ -45,7 +59,6 @@ export class PlayerService {
   }
 
   stop(): Observable<any> {
-    this.isPlaying = false;
     return this.modifyPlayback(from(this.player.stop()));
   }
 
@@ -95,9 +108,20 @@ export class PlayerService {
     return null;
   }
 
-  //TODO: remove or change when playStateChange listener is implemented
   getIsCurrentlyPlaying(): boolean {
-    return this.isPlaying;
+    return this.playbackState === PlaybackState.PLAYING || this.playbackState === PlaybackState.PAUSED;
+  }
+
+  getCurrentPlaybackTime(): number {
+    return this.player.currentPlaybackTime;
+  }
+
+  getCurrentPlaybackDuration(): number {
+    return this.player.currentPlaybackDuration;
+  }
+
+  getCurrentPlaybackState(): PlaybackState {
+    return this.playbackState;
   }
 
   setTitle(): void {
@@ -111,5 +135,16 @@ export class PlayerService {
 
   mediaItemDidChange(event: any): void {
     this.currentSong = event.item;
+  }
+
+  playbackStateDidChange(event: any): void {
+    this.playbackState = this.getPlaybackStateFromEventPlaybackState(event.state);
+    PlaybackState.COMPLETED;
+    console.log('break');
+  }
+
+  getPlaybackStateFromEventPlaybackState(playbackState: string): PlaybackState {
+    let playbackString: string = PlaybackState[playbackState];
+    return PlaybackState[playbackString];
   }
 }

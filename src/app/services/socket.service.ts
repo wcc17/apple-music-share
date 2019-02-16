@@ -4,6 +4,7 @@ import { Message } from '../model/message';
 import { Event } from '../model/event';
 
 import * as socketIo from 'socket.io-client';
+import { ClientUpdateMessage } from '../model/client-update-message';
 
 const SERVER_URL = 'http://localhost:8080';
 
@@ -48,6 +49,10 @@ export class SocketService {
   }
 
   public send(message: Message, event: string): void {
+    this.socket.emit(event, message);
+  }
+
+  public sendClientUpdate(message: ClientUpdateMessage, event: string): void {
     this.socket.emit(event, message);
   }
 }

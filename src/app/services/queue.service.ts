@@ -7,6 +7,7 @@ import { Song } from '../model/song';
 import { RoomService } from './room.service';
 import { MessageService } from './message.service';
 import { User } from '../model/user';
+import { PlayerService, PlaybackState } from './player.service';
 
 const UPDATE_TIME = 5000;
 
@@ -22,7 +23,8 @@ export class QueueService {
     private socketService: SocketService, 
     private userService: UserService,
     private roomService: RoomService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private playerService: PlayerService
   ) { }
 
   public initIoConnection(roomId?: number): void {
@@ -40,23 +42,36 @@ export class QueueService {
     this.roomService.initRoomService(roomId);
 
     this.updateTimer = setInterval(() => {
-      this.updateUser();
+      this.sendClientUpdateToServer();
     }, UPDATE_TIME);
   }
 
-  private updateUser(): void {
-    console.log('updating user');
+  private sendClientUpdateToServer(): void {
+    if(!this.isConnected) {
+      return;
+    }
+    
+    console.log('sending client update to server');
+
+    let playbackTime: number = this.playerService.getCurrentPlaybackTime();
+    let playbackDuration: number = this.playerService.getCurrentPlaybackDuration();
+    let playbackState: PlaybackState = this.playerService.getCurrentPlaybackState();
+    console.log('break here');
 
     //just emit up to date user info to the server
-    if(this.userService.getUser()) {
-      this.socketService.send({
+    if(this.userService.getUser() && this.userService.getUser().roomId) {
+      this.socketService.sendClientUpdate({
         from: this.userService.getUser(),
-      }, 'update-user');
+        currentPlaybackTime: playbackTime,
+        currentPlaybackDuration: playbackDuration,
+        currentPlaybackState: playbackState
+      }, 'client-update');
     }
   }
 
   public queueSong(song: Song): void {
-    if(!song) {
+    if(!song || !this.isConnected) {
+      //TODO: should warn user that they're not connected to a room yet or not allow them to click on a song
       return;
     }
 

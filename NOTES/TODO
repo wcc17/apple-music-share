@@ -1,0 +1,7 @@
+For the server:
+should not accept any messages dated before server start time. would need to be sending a timestamp from client
+should disconnect any users trying to send messages that don't have a roomID (unless its create or join room of course)
+
+For the client:
+should be sending timestamps with every message to server
+should disconnect the user from the room once three failed messages happen 
