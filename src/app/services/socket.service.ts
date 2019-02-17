@@ -36,10 +36,8 @@ export class SocketService {
     return this.onListen('queue');
   }
 
-  public onListen(name: string): Observable<Message> {
-    return new Observable<Message>(observer => {
-      this.socket.on(name, (data: Message) => observer.next(data));
-    })
+  public onLeaderUpdate(): Observable<ClientUpdateMessage> {
+    return this.onListenClientUpdate('leader-update');
   }
 
   public onEvent(event: Event): Observable<any> {
@@ -54,5 +52,17 @@ export class SocketService {
 
   public sendClientUpdate(message: ClientUpdateMessage, event: string): void {
     this.socket.emit(event, message);
+  }
+
+  private onListen(event: string): Observable<Message> {
+    return new Observable<Message>(observer => {
+      this.socket.on(event, (data: Message) => observer.next(data));
+    })
+  }
+
+  private onListenClientUpdate(event: string): Observable<ClientUpdateMessage> {
+    return new Observable<ClientUpdateMessage>(observer => {
+      this.socket.on(event, (data: ClientUpdateMessage) => observer.next(data));
+    })
   }
 }

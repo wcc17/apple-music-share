@@ -8,6 +8,7 @@ import { RoomService } from './room.service';
 import { MessageService } from './message.service';
 import { User } from '../model/user';
 import { PlayerService, PlaybackState } from './player.service';
+import { ClientUpdateMessage } from '../model/client-update-message';
 
 const UPDATE_TIME = 5000;
 
@@ -32,6 +33,7 @@ export class QueueService {
       this.socketService.initSocket();
 
       this.socketService.onQueue().subscribe((message: Message) => { this.handleQueueSong(message) });
+      this.socketService.onLeaderUpdate().subscribe((message: ClientUpdateMessage) => { this.handleClientUpdate(message) });
       this.socketService.onEvent(Event.CONNECT).subscribe(() => { this.handleConnectEvent() });
       this.socketService.onEvent(Event.DISCONNECT).subscribe(() => { this.handleDisconnectEvent() });
 
@@ -59,6 +61,7 @@ export class QueueService {
     console.log('break here');
 
     //just emit up to date user info to the server
+    //TODO: if the user isn't the leader should I even bother?
     if(this.userService.getUser() && this.userService.getUser().roomId) {
       this.socketService.sendClientUpdate({
         from: this.userService.getUser(),
@@ -93,6 +96,24 @@ export class QueueService {
     if(message && message.currentQueue) {
       this.currentQueue = message.currentQueue;
     }
+  }
+
+  private handleClientUpdate(message: ClientUpdateMessage) {
+    this.messageService.handleMessage(message);
+
+    //if the playbackstate is NONE, start the song regardless of their status
+     //realistically, people won't be joining at the same time, but if they did, the song should start at roughly the same time
+    
+    //if the user is the leader and the song already has a valid state, do nothing
+    //if the user is not the leader, 
+      //ensure that the user's playback info is similar (+/- 5 seconds or so) to the leader. If not, fast forward or rewind the song
+      //if the message says the user should be the leader, make the user the leader.
+
+    //TODO: in playerService, when the song ends and the user is the leader, force an update to the server
+      //the server will emit the next song to EVERYONE and they will either queue it (if their song is still playing, again check similarity 
+      //like above) or go ahead and play it. 
+    
+
   }
 
   private handleConnectEvent(): void {
