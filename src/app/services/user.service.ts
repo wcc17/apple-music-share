@@ -44,6 +44,10 @@ export class UserService {
     this.currentUser.roomId = roomId;
   }
 
+  getIsLeader(): boolean {
+    return this.currentUser.isLeader;
+  }
+  
   setIsLeader(isLeader: boolean): void {
     this.currentUser.isLeader = isLeader;
   }

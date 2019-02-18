@@ -44,8 +44,7 @@ export class ListSongComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
       } else {
         let selectedSong: Song = this.songs[index];
-        selectedSong.requestedBy = this.userService.getUser();
-        this.queueService.queueSong(selectedSong);
+        this.queueService.queueSong(selectedSong, this.userService.getUser());
       }
     }
   }
