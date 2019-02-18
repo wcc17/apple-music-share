@@ -20,6 +20,7 @@ export class QueueComponent implements OnInit {
   }
 
   getCurrentQueue(): Song[] {
+    //TODO: this isn't getting updated automatically if the user is already on the screen
     return this.queueService.getCurrentQueue();
   }
 

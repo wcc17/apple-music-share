@@ -41,10 +41,13 @@ export class RoomService {
   private handleRoomJoined(message: Message) {
     this.messageService.handleMessage(message);
 
-    this.userService.setIsLeader(message.from.isLeader);
-    this.userService.setRoomId(message.from.roomId);
-    this.hasJoinedRoom = true;
-    this.errorJoiningRoom = false;
+    //we can get messages about other users joining the room - don't want to screw up our user though
+    if(message.from && message.from.id === this.userService.getUserId()) {
+      this.userService.setIsLeader(message.from.isLeader);
+      this.userService.setRoomId(message.from.roomId);
+      this.hasJoinedRoom = true;
+      this.errorJoiningRoom = false;
+    }
   }
 
   private handleRoomNotJoined(message: Message) {

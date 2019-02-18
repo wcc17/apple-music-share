@@ -5,4 +5,6 @@ export class ClientUpdateMessage extends Message {
     currentPlaybackTime: number;
     currentPlaybackDuration: number;
     currentPlaybackState: PlaybackState;
+    forcePlayback: boolean;
+    removeMostRecentSong: boolean;
 }

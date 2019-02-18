@@ -30,6 +30,10 @@ export class PlayerService {
     musicKitService.addMediaItemDidChangeEventListener(this.mediaItemDidChange.bind(this));
     musicKitService.addPlaybackDidChangeEventListener(this.playbackStateDidChange.bind(this));
   }
+
+  addPlaybackDidChangeEventListener(listener: any) {
+    this.musicKitService.addPlaybackDidChangeEventListener(listener);
+  }
   
   playSong(songs: any[], index: number): Observable<any> {
     if(songs) {
@@ -68,6 +72,10 @@ export class PlayerService {
 
   skipToPrevious(): Observable<any> {
     return this.modifyPlayback(from(this.player.skipToPreviousItem()));
+  }
+
+  seekToTime(playbackTime: number): Observable<any> {
+    return from(this.player.seekToTime(playbackTime));
   }
 
   getCurrentlyPlayingSongInfo(): string {
@@ -139,8 +147,6 @@ export class PlayerService {
 
   playbackStateDidChange(event: any): void {
     this.playbackState = this.getPlaybackStateFromEventPlaybackState(event.state);
-    PlaybackState.COMPLETED;
-    console.log('break');
   }
 
   getPlaybackStateFromEventPlaybackState(playbackState: string): PlaybackState {

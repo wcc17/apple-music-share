@@ -73,4 +73,12 @@ export class MusicKitService {
   addPlaybackDidChangeEventListener(eventListener: any) {
     this.musicKit.addEventListener( MusicKit.Events.playbackStateDidChange, eventListener );
   }
+
+  getDeveloperToken() {
+    return this.musicKit.developerToken;
+  }
+
+  getMusicUserToken() {
+    return this.musicKit.musicUserToken;
+  }
 }
