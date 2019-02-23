@@ -19,7 +19,6 @@ export class SocketService {
 
   public initSocket(): void {
     this.socket = socketIo(SERVER_URL);
-    this.socket.io.skipReconnects = true;
   }
 
   public onRoomJoined(): Observable<Message> {
