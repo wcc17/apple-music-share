@@ -5,8 +5,9 @@ import { Event } from '../model/event';
 
 import * as socketIo from 'socket.io-client';
 import { ClientUpdateMessage } from '../model/client-update-message';
+import { environment } from 'src/environments/environment';
 
-const SERVER_URL = 'http://localhost:8080';
+const SERVER_URL = environment.socket_io_server;
 
 @Injectable({
   providedIn: 'root'
