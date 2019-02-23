@@ -45,33 +45,24 @@ export class PlayerService {
     }
   }
 
-  /**
-   * Method that ensures information across the application is updated
-   * when the song changes.
-   * @param arg 
-   */
-  modifyPlayback(arg: Observable<any>): Observable<any> {
-    return arg.pipe(map(x => this.setTitle()));
-  }
-
   play(): Observable<any> {
-    return this.modifyPlayback(from(this.player.play()));
+    return from(this.player.play());
   }
 
   pause(): Observable<any> {
-    return this.modifyPlayback(from(this.player.pause()));
+    return from(this.player.pause());
   }
 
   stop(): Observable<any> {
-    return this.modifyPlayback(from(this.player.stop()));
+    return from(this.player.stop());
   }
 
   skipToNext(): Observable<any> {
-    return this.modifyPlayback(from(this.player.skipToNextItem()));
+    return from(this.player.skipToNextItem());
   }
 
   skipToPrevious(): Observable<any> {
-    return this.modifyPlayback(from(this.player.skipToPreviousItem()));
+    return from(this.player.skipToPreviousItem());
   }
 
   seekToTime(playbackTime: number): Observable<any> {
@@ -134,7 +125,7 @@ export class PlayerService {
 
   setTitle(): void {
     let title = this.getCurrentlyPlayingSongInfo();
-    if(!title) {
+    if(!title || ( (this.playbackState !== PlaybackState.PLAYING) && (this.playbackState !== PlaybackState.PAUSED)) ) {
       title = 'Apple Music Share';
     }
 
@@ -147,6 +138,7 @@ export class PlayerService {
 
   playbackStateDidChange(event: any): void {
     this.playbackState = this.getPlaybackStateFromEventPlaybackState(event.state);
+    this.setTitle();
   }
 
   getPlaybackStateFromEventPlaybackState(playbackState: string): PlaybackState {

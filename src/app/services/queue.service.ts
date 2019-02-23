@@ -9,7 +9,7 @@ import { MessageService } from './message.service';
 import { User } from '../model/user';
 import { PlayerService, PlaybackState } from './player.service';
 import { ClientUpdateMessage } from '../model/client-update-message';
-import { from, Observable } from 'rxjs';
+import { from } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 import { ApiService } from './api.service';
 
@@ -98,25 +98,6 @@ export class QueueService {
     }, 'queue-request');
   }
 
-  public handleSongCompleted() {
-    // this.playerService.setCurrentPlaybackState(PlaybackState.NONE);
-
-    //TODO: this is going to force non-leaders to play the next song, potentially stopping the previous one a bit early. Need to handle this scenario
-    //will it work to just queue the song up and let it play next? would need to use !FORCE_PLAYBACK instead
-    this.sendClientUpdateToServer(FORCE_PLAYBACK, REMOVE_MOST_RECENT_SONG_FROM_QUEUE);
-
-
-    //if the user is the leader:
-      //remove the song from the current queue (make sure you request the latest queue in case anyone has changed it)
-      //force an update with the new queue to the server (this will be a tad different than the usual update)
-      //set the playbackstate to NONE (if possible) so that when the next update comes through a new song will start
-      
-    //if the user is not the leader
-      //the song should already be removed from the queue
-      //match the leader's playback based on its last update. Wait until the next update if the leader's song == the current song
-    
-  }
-
   private handleQueueSong(message: Message) {
     this.messageService.handleMessage(message);
 
@@ -128,36 +109,71 @@ export class QueueService {
   private handleClientUpdate(message: ClientUpdateMessage) {
     this.messageService.handleMessage(message);
 
+    if(this.userService.getIsLeader()) {
+      this.handleLeaderUpdate(message);
+    } else {
+      this.handleFollowerUpdate(message);
+    }
+
+    //TODO: should print errors if playback state is in an unexpected state not being handled here
+  }
+
+  private handleLeaderUpdate(message: Message): void {
+    let currentSong: Song = message.currentQueue[0];
+    let playbackState = this.playerService.getCurrentPlaybackState();
+
+    console.log('leader playbackstate: ' + playbackState);
+
+    if(currentSong && (playbackState === PlaybackState.NONE || playbackState === PlaybackState.STOPPED)) {
+      //play the song and then send the client update to the server, forcing others playback
+      from(this.playerService.playSong([currentSong], 0))
+        .pipe(map(x => this.sendClientUpdateToServer(FORCE_PLAYBACK, !REMOVE_MOST_RECENT_SONG_FROM_QUEUE)))
+        .subscribe();
+    }
+  }
+
+  private handleFollowerUpdate(message: ClientUpdateMessage): void {
     let playbackTime: number = message.currentPlaybackTime;
     let playbackDuration: number = message.currentPlaybackDuration;
     let playbackState: PlaybackState = message.currentPlaybackState;
     let currentSong: Song = message.currentQueue[0];
-    let forcePlayback: boolean = message.forcePlayback;
 
-    if(this.userService.getIsLeader()) {
-      console.log('leader playbackstate: ' + playbackState);
-      if( (playbackState === PlaybackState.NONE || playbackState === PlaybackState.COMPLETED) && currentSong) {
-        
-        //play the song and then send the client update to the server, forcing others playback
-        from(this.playerService.playSong([currentSong], 0))
-          .pipe(map(x => this.sendClientUpdateToServer(FORCE_PLAYBACK, !REMOVE_MOST_RECENT_SONG_FROM_QUEUE)))
-          .subscribe();
-      }
-    } else {
-      if(forcePlayback) {
+    if(currentSong) {
+      let leaderWantsToForcePlayback: boolean = message.forcePlayback;
+      if(leaderWantsToForcePlayback) {
         this.playSongAndSeekToTime(currentSong, playbackTime);
       } else {
         //ensure the user's playback is similar to the leaders. If not, handle the discrepancy
         this.handlePlaybackDifferences(playbackTime, playbackDuration, playbackState, currentSong);
       }
+    }
 
-      //if the message says the user should be the leader, make the user the leader.
-      if(message.from.id === this.userService.getUserId() && message.from.isLeader) {
-        this.userService.setIsLeader(true);
+    //if the message says the user should be the leader, make the user the leader.
+    if(message.from.id === this.userService.getUserId() && message.from.isLeader) {
+      this.userService.setIsLeader(true);
+    }
+  }
+
+  public handleSongCompleted(playbackState: PlaybackState) {
+
+    if(playbackState === PlaybackState.COMPLETED) {
+      if(this.userService.getIsLeader()) {
+        //TODO: this is going to force non-leaders to play the next song, potentially stopping the previous one a bit early. Need to handle this scenario
+        //will it work to just queue the song up and let it play next? would need to use !FORCE_PLAYBACK instead
+        this.sendClientUpdateToServer(!FORCE_PLAYBACK, REMOVE_MOST_RECENT_SONG_FROM_QUEUE);
       }
     }
 
-    //TODO: should print errors if playback state is in an unexpected state not being handled here
+
+    //if the user is the leader:
+      //remove the song from the current queue (make sure you request the latest queue in case anyone has changed it)
+      //force an update with the new queue to the server (this will be a tad different than the usual update)
+      //set the playbackstate to NONE (if possible) so that when the next update comes through a new song will start
+      
+    //if the user is not the leader
+      //the song should already be removed from the queue
+      //match the leader's playback based on its last update. Wait until the next update if the leader's song == the current song
+    
   }
 
   private handlePlaybackDifferences(playbackTime: number, playbackDuration: number, playbackState: PlaybackState, currentSong: Song) {
@@ -173,7 +189,6 @@ export class QueueService {
           break;
       }
     } else {
-      //TODO: compare the times here if needed
       let playbackTimeDifference = Math.abs(playbackTime - this.playerService.getCurrentPlaybackTime());
       if(playbackTimeDifference > 10) {
         this.playerService.seekToTime(playbackTime + 2); //adding 2 to account for time spent since leader sent update
@@ -225,8 +240,6 @@ export class QueueService {
 
   private playbackStateDidChange(event: any): void {
     let playbackState: PlaybackState = this.playerService.getCurrentPlaybackState();
-    if(playbackState === PlaybackState.COMPLETED) {
-      this.handleSongCompleted();
-    }
+    this.handleSongCompleted(playbackState);
   }
 }

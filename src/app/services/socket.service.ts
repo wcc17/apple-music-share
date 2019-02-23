@@ -7,7 +7,6 @@ import * as socketIo from 'socket.io-client';
 import { ClientUpdateMessage } from '../model/client-update-message';
 
 const SERVER_URL = 'http://localhost:8080';
-// const SERVER_URL = 'http://73.7.178.47:1456';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +18,7 @@ export class SocketService {
 
   public initSocket(): void {
     this.socket = socketIo(SERVER_URL);
+    this.socket.io.skipReconnects = true;
   }
 
   public onRoomJoined(): Observable<Message> {
