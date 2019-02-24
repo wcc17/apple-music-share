@@ -1,16 +1,16 @@
 <div id="mainContainer" class="container-fluid">
   
   <div *ngIf="this.isUserAuthorized()">
-    <div id="navRow" class="row">
-      <div id="navigationCol" class="col-2">
+    <div class="row navRow">
+      <div class="col-2 navigationCol">
         <app-navigation></app-navigation>
       </div>
-      <div id="contentCol" class="col-10">
+      <div class="col-10 contentCol">
         <router-outlet></router-outlet>
       </div>
     </div>
     
-    <div id="playerControlsRow" class="row">
+    <div class="row playerControlsRow fixed-bottom">
       <div class="col" align="center">
         <app-music-player></app-music-player>
       </div>

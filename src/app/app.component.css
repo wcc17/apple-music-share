@@ -1,18 +1,18 @@
-#navRow {
+.navRow {
     max-height: 90vh; /** must add up to 100 when added to the height in #playerControlsRow **/
     min-height: 90vh;
 }
 
-#navigationCol {
+.navigationCol {
     border-right: 1px solid lightgray;
 }
 
-#playerControlsRow {
+.playerControlsRow {
     border: 1px solid lightgray;
     height: 10vh; /** must add up to 100 when added to the max-height in #navRow **/
 }
 
-#contentCol {
+.contentCol {
     overflow-y: scroll;
-    padding: 0px;
+    height: 90vh;
 }
