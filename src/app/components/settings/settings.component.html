@@ -15,10 +15,10 @@
       </div>
     </div>
 
-    <div id="appModeContainer" class="setting-container" >
+    <div class="setting-container" >
       <div class="row">
         <div class="col">
-          <label class="form-check-label" for="appModeCheck">
+          <label class="form-check-label">
             <span class="text-primary">Enable standalone music player</span>
           </label>
         </div>
@@ -26,10 +26,33 @@
 
       <div class="row">
         <div class="col">
-            <input class="form-check-input" type="checkbox" value="" id="appModeCheck" (change)="this.toggleAppMode($event)">
+            <input class="form-check-input setting-check-box" 
+              type="checkbox" value="" id="appModeCheck" 
+              (change)="this.toggleAppMode($event)"
+              [checked]="this.getIsStandAloneAppMode()"
+            >
+        </div>
+      </div>
+    </div>
+
+    <div class="setting-container" *ngIf="!this.getIsStandAloneAppMode()">
+      <div class="row">
+        <div class="col">
+          <label class="form-check-label">
+            <span class="text-primary">Hide non-Apple Music songs in Shared Mode</span>
+          </label>
         </div>
       </div>
 
+      <div class="row">
+        <div class="col">
+            <input class="form-check-input setting-check-box" 
+              type="checkbox" value="" id="hideNonAppleMusicCheck" 
+              (change)="this.toggleShouldHideNonAppleMusic($event)"
+              [checked]="this.getShouldHideNonAppleMusic()"
+            >
+        </div>
+      </div>
     </div>
 
     <div id="sharedQueueSettingsContainer" *ngIf="!this.getIsStandAloneAppMode()">

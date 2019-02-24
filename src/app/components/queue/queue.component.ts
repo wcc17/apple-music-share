@@ -12,7 +12,9 @@ export class QueueComponent implements OnInit {
   constructor(private queueService: QueueService, private configService: ConfigService) { }
 
   ngOnInit() {
-    this.updateQueue();
+    if(this.isSocketConnectionActive()) {
+      this.updateQueue();
+    }
   }
 
   updateQueue(): void {
