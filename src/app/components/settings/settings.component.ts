@@ -25,11 +25,7 @@ export class SettingsComponent implements OnInit {
     private messageService: MessageService
   ) { }
 
-  ngOnInit() {
-    const standAloneAppCheckBox: HTMLElement = document.getElementById('appModeCheck');
-    const inputElement: HTMLInputElement = (<HTMLInputElement> standAloneAppCheckBox);
-    inputElement.checked = this.getIsStandAloneAppMode();
-  }
+  ngOnInit() { }
 
   connectAndJoinRoom(): void {
     const inputElement: HTMLElement = document.getElementById('roomIdInput');
@@ -93,6 +89,14 @@ export class SettingsComponent implements OnInit {
 
   getIsStandAloneAppMode(): boolean {
     return this.configService.getStandAloneAppMode();
+  }
+
+  toggleShouldHideNonAppleMusic(event: any): void {
+    this.configService.setShouldHideNonAppleMusic(event.currentTarget.checked);
+  }
+
+  getShouldHideNonAppleMusic(): boolean {
+    return this.configService.getShouldHideNonAppleMusic();
   }
 
 }

@@ -21,6 +21,7 @@ import { ListSongComponent } from './components/list-song/list-song.component';
 import { ListCollectionComponent } from './components/list-collection/list-collection.component';
 import { ListArtistComponent } from './components/list-artist/list-artist.component';
 import { AuthenticationComponent } from './components/authentication/authentication.component';
+import { WarningModalComponent } from './components/warning-modal/warning-modal.component';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
@@ -45,7 +46,8 @@ import { HttpClientModule } from '@angular/common/http';
     LibraryArtistsComponent,
     ListArtistComponent,
     SingleArtistComponent,
-    AuthenticationComponent
+    AuthenticationComponent,
+    WarningModalComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +55,7 @@ import { HttpClientModule } from '@angular/common/http';
     NgbModule,
     HttpClientModule
   ],
+  entryComponents: [WarningModalComponent],
   providers: [],
   bootstrap: [AppComponent]
 })

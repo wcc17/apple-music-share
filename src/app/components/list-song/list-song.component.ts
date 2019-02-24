@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, SimpleChanges, SimpleChange, OnChanges } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
-import { Subscription } from 'rxjs';
+import { Subscription, from } from 'rxjs';
 import { MusicKitService } from 'src/app/services/music-kit.service';
 import { Song } from 'src/app/model/song';
 import { UserService } from 'src/app/services/user.service';
 import { QueueService } from 'src/app/services/queue.service';
 import { ConfigService } from 'src/app/services/config.service';
+import { WarningModalComponent } from '../warning-modal/warning-modal.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
@@ -15,7 +17,7 @@ const artworkHeight = 50;
   templateUrl: './list-song.component.html',
   styleUrls: ['./list-song.component.css'],
 })
-export class ListSongComponent implements OnInit, OnDestroy {
+export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() songs: Song[];
   @Input() showArtwork: boolean;
@@ -28,10 +30,16 @@ export class ListSongComponent implements OnInit, OnDestroy {
     private musicKitService: MusicKitService, 
     private userService: UserService,
     private queueService: QueueService,
-    private configService: ConfigService
+    private configService: ConfigService, 
+    private modalService: NgbModal
   ) { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngOnChanges(changes: SimpleChanges) {
+    let songChange: SimpleChange = changes.songs;
+    let newSongs: Song[] = songChange.currentValue;
+    this.songs = this.filterNonAppleMusicSongsIfApplicable(newSongs);
   }
 
   ngOnDestroy(): void {
@@ -41,10 +49,9 @@ export class ListSongComponent implements OnInit, OnDestroy {
   onSongSelected(index): void {
     if(this.allowSongSelection) {
       if(this.configService.getStandAloneAppMode()) {
-        this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
+        this.handleSongSelectedStandAloneMode(index);
       } else {
-        let selectedSong: Song = this.songs[index];
-        this.queueService.queueSong(selectedSong, this.userService.getUser());
+        this.handleSongSelectedShareMode(index);
       }
     }
   }
@@ -53,6 +60,31 @@ export class ListSongComponent implements OnInit, OnDestroy {
     let currentSongId = this.playerService.getCurrentlyPlayingSongId();
     if(currentSongId && this.songs) {
       return (this.songs[index].id === currentSongId);
+    }
+
+    return false;
+  }
+
+  shouldDisableNonAppleMusicSongWithIndex(index: number): boolean {
+    return this.shouldDisableNonAppleMusicSong(this.songs[index]);
+  }
+
+  private shouldDisableNonAppleMusicSong(song: Song): boolean {
+    if(!this.configService.getStandAloneAppMode()) {
+      if(!this.isAppleMusicSong(song)) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  private isAppleMusicSong(song: Song): boolean {
+    if(song
+      && song.attributes
+      && song.attributes.playParams
+      && song.attributes.playParams.catalogId) {
+      return true;
     }
 
     return false;
@@ -84,6 +116,59 @@ export class ListSongComponent implements OnInit, OnDestroy {
 
   getArtworkHeight(): number {
     return artworkHeight;
+  }
+
+  private handleSongSelectedStandAloneMode(index: number): void {
+    this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
+  }
+
+  private handleSongSelectedShareMode(index: number): void {
+    let isConnectedToServerForShare: boolean = this.queueService.getIsConnected();
+    let isAppleMusicSong: boolean = this.isAppleMusicSong(this.songs[index]);
+
+    if(isConnectedToServerForShare && isAppleMusicSong) {
+      this.queueSongInSharedQueue(index);
+    } else if (isConnectedToServerForShare && !isAppleMusicSong) {
+      this.showAppleMusicWarningModal();
+    } else if (!isConnectedToServerForShare) {
+      this.showNotConnectedWarningModal();
+    }
+  }
+
+  private queueSongInSharedQueue(index: number): void {
+    let selectedSong: Song = this.songs[index];
+    this.queueService.queueSong(selectedSong, this.userService.getUser());
+  }
+
+  private showAppleMusicWarningModal(): void {
+    let title: string = 'Song not found in Apple Music';
+    let body: string = 'This song is not able to be queued because it was not found in the Apple Music Store. You can hide these songs in Settings';
+    this.showModal(title, body);
+  }
+
+  private showNotConnectedWarningModal(): void {
+    let title: string = "Can't Queue Song - Not Connected";
+    let body: string = "You are not connected to a room. Please go to settings and create a room or join a friend's."
+    this.showModal(title, body);
+  }
+
+  private showModal(title: string, body: string): void {
+    const modal = this.modalService.open(WarningModalComponent, { centered: true });
+    modal.componentInstance.title = title;
+    modal.componentInstance.body = body;
+  }
+
+  private filterNonAppleMusicSongsIfApplicable(songs: Song[]): Song[] {
+    if(this.configService.getShouldHideNonAppleMusic()) {
+      let filteredSongs: Song[] = [];
+      filteredSongs = songs.filter(
+        song => !this.shouldDisableNonAppleMusicSong(song)
+      );
+
+      return filteredSongs;
+    }
+
+    return songs;
   }
 
 }
