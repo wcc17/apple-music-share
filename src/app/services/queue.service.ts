@@ -114,8 +114,6 @@ export class QueueService {
     } else {
       this.handleFollowerUpdate(message);
     }
-
-    //TODO: should print errors if playback state is in an unexpected state not being handled here
   }
 
   private handleLeaderUpdate(message: Message): void {
@@ -159,8 +157,20 @@ export class QueueService {
     if(playbackState === PlaybackState.COMPLETED) {
       if(this.userService.getIsLeader()) {
         //TODO: this is going to force non-leaders to play the next song, potentially stopping the previous one a bit early. Need to handle this scenario
-        //will it work to just queue the song up and let it play next? would need to use !FORCE_PLAYBACK instead
+        //TODO: should wait a few seconds before actually playing the leader's next song and forcing others.
+        //the leader will have to wait a couple of seconds for the next song, but it will allow follower's songs to finish and then start immediately
         this.sendClientUpdateToServer(!FORCE_PLAYBACK, REMOVE_MOST_RECENT_SONG_FROM_QUEUE);
+
+        //TODO: another scenario thats going to happen (and has already):
+        /**
+         * 1. Leader finishes song
+         * 2. send client update to the server to remove the most recent song from the queue
+         * 3. the server sends the most previous client update containing a force_playback, but the queue hasn't been updated yet
+         * 4. the leader starts to play that song again, but then immediately gets the update from 2.) telling it play the next song instead
+         * 
+         * Fix: should probably give this particular clientMessage a flag that says leader should ignore all other updates
+         * until an update with a specific id/timestamp/something comes in so that a song in't repeated
+         */
       }
     }
 
