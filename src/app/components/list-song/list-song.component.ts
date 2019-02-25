@@ -24,6 +24,7 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showHeaders: boolean;
   @Input() showRequestedBy: boolean;
   @Input() allowSongSelection: boolean;
+  @Input() shouldFilterNonAppleMusicIfApplicable: boolean; //allow components to bypass the filter if they're sure its already apple music
   private subscriptions: Subscription = new Subscription();
 
   constructor(private playerService: PlayerService, 
@@ -70,7 +71,8 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private shouldDisableNonAppleMusicSong(song: Song): boolean {
-    if(!this.configService.getStandAloneAppMode()) {
+    if(this.shouldFilterNonAppleMusicIfApplicable
+        && !this.configService.getStandAloneAppMode()) {
       if(!this.isAppleMusicSong(song)) {
         return true;
       }
@@ -159,7 +161,8 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private filterNonAppleMusicSongsIfApplicable(songs: Song[]): Song[] {
-    if(this.configService.getShouldHideNonAppleMusic()) {
+    if(this.shouldFilterNonAppleMusicIfApplicable 
+        && this.configService.getShouldHideNonAppleMusic()) {
       let filteredSongs: Song[] = [];
       filteredSongs = songs.filter(
         song => !this.shouldDisableNonAppleMusicSong(song)
