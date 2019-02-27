@@ -7,6 +7,8 @@ declare var MusicKit: any;
   providedIn: 'root'
 })
 export class MusicKitService {
+  private collectionRequestLimit: number = 10;
+  private libraryRequestLimit: number = 100;
   private isAuthorized: boolean = false;
   private musicKit: any;
 
@@ -80,5 +82,13 @@ export class MusicKitService {
 
   getMusicUserToken() {
     return this.musicKit.musicUserToken;
+  }
+
+  getLibraryRequestLimit(): number {
+    return this.libraryRequestLimit;
+  }
+
+  getCollectionRequestLimit(): number {
+    return this.collectionRequestLimit;
   }
 }

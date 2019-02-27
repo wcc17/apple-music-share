@@ -13,9 +13,7 @@ export class ListArtistComponent implements OnInit {
 
   constructor(private router: Router) { }
 
-  ngOnInit() {
-    console.log('break');
-  }
+  ngOnInit() { }
 
   onArtistSelected(index: number): void {
     let artist = this.artists[index];

@@ -1,55 +1,68 @@
 import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { MusicKitService } from './music-kit.service';
+import { Song } from '../model/song';
+import { LibrarySongService } from './library-song.service';
+import { LibraryArtistService } from './library-artist.service';
+import { LibraryRecentlyAddedService } from './library-recently-added.service';
+import { LibraryAlbumService } from './library-album.service';
+import { LibraryPlaylistService } from './library-playlist.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LibraryService {
-  private libraryRequestLimit: number = 100;
-  private collectionRequestLimit: number = 10;
   private library: any = this.musicKitService.getLibrary();
 
-  constructor(private musicKitService: MusicKitService) { }
+  constructor(
+    private musicKitService: MusicKitService,
+    private librarySongService: LibrarySongService,
+    private libraryArtistService: LibraryArtistService,
+    private libraryRecentlyAddedService: LibraryRecentlyAddedService,
+    private libraryAlbumService: LibraryAlbumService,
+    private libraryPlaylistService: LibraryPlaylistService
+  ) { }
 
-  getLibrarySongs(startIndex: number): Observable<any> {
-    return from(this.library.songs(null , { limit: this.libraryRequestLimit, offset: startIndex }));
+  //done:
+  public getLibrarySongs(): Song[] {
+    return this.librarySongService.getLibrarySongs();
   }
 
-  getRecentlyAdded(startIndex: number): Observable<any> {
-    return from(this.library.collection(
-      'recently-added', null, { limit: this.collectionRequestLimit, offset: startIndex }));
+  public getLibraryArtists(): any[] {
+    return this.libraryArtistService.getLibraryArtists();
   }
 
-  getLibraryAlbums(startIndex: number): Observable<any> {
-    return from (this.library.albums(null, { limit: this.libraryRequestLimit, offset: startIndex }));
+  public getSingleLibraryArtist(artistId: string): Observable<any> {
+    return this.libraryArtistService.getSingleLibraryArtist(artistId);
   }
 
-  getLibraryAlbum(albumId: string): Observable<any> {
-    return from(this.library.album(albumId));
+  public getRecentlyAdded(): any[] {
+    return this.libraryRecentlyAddedService.getLibraryRecentlyAdded();
   }
 
-  getPlaylists(startIndex: number): Observable<any> {
-    return from(this.library.playlists(null, { limit: this.libraryRequestLimit, offset: startIndex }));
+  public getLibraryAlbums(): any[] {
+    return this.libraryAlbumService.getLibraryAlbums(); 
   }
 
-  getLibraryArtists(startIndex: number): Observable<any> {
-    return from(this.library.artists(null, { limit: this.libraryRequestLimit, offset: startIndex }));
+  public getLibraryAlbum(albumId: string): Observable<any> {
+    return this.libraryAlbumService.getLibraryAlbum(albumId);
   }
 
-  getLibraryArtist(artistId: string): Observable<any> {
-    return from(this.library.artist(artistId, { include: 'albums' } ));
+  public getLibraryPlaylists(): any[] {
+    return this.libraryPlaylistService.getLibraryPlaylists();
   }
 
-  getLibraryPlaylist(id: string): Observable<any> {
-    return from(this.library.playlist(id));
+  public getLibraryPlaylist(id: string): Observable<any> {
+    return this.libraryPlaylistService.getSingleLibraryPlaylist(id);
   }
 
-  getLibraryRequestLimit(): number {
-    return this.libraryRequestLimit;
+  //TODO: temporary, remove 
+  public getCollectionRequestLimit(): number {
+    return this.musicKitService.getCollectionRequestLimit();
   }
 
-  getCollectionRequestLimit(): number {
-    return this.collectionRequestLimit;
+  //TODO: temporary, remove 
+  public getLibraryRequestLimit(): number {
+    return this.musicKitService.getLibraryRequestLimit();
   }
 }

@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { LibraryService } from 'src/app/services/library.service';
 
 @Component({
@@ -7,33 +6,13 @@ import { LibraryService } from 'src/app/services/library.service';
   templateUrl: './library-albums.component.html',
   styleUrls: ['./library-albums.component.css']
 })
-export class LibraryAlbumsComponent implements OnInit, OnDestroy {
-
-  private albums: any[] = []; //TODO: these are being destroyed and retrieved again every time the user changes routes. Need to keep this somehow
-  private subscriptions: Subscription = new Subscription();
+export class LibraryAlbumsComponent implements OnInit {
 
   constructor(private libraryService: LibraryService) { }
 
-  ngOnInit() {
-    this.getLibraryAlbums(0);
-  }
+  ngOnInit() { }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-  }
-
-  getLibraryAlbums(startIndex: number):void {
-    this.subscriptions.add( 
-      this.libraryService.getLibraryAlbums(startIndex).subscribe( albums => {
-        if(albums.length) {
-          this.albums = this.albums.concat(albums);
-
-          //TODO: remove the length check
-          if(this.albums.length < 100) {
-            this.getLibraryAlbums(startIndex + this.libraryService.getLibraryRequestLimit());
-          }
-        }
-      })
-    );
+  public getLibraryAlbums(): any[] {
+    return this.libraryService.getLibraryAlbums();
   }
 }
