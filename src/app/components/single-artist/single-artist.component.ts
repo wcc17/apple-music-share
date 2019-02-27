@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
-import { LibraryService } from 'src/app/services/library.service';
 import { ApiService } from 'src/app/services/api.service';
+import { LibraryService } from 'src/app/services/library.service';
 
 @Component({
   selector: 'app-single-artist',
@@ -41,7 +41,7 @@ export class SingleArtistComponent implements OnInit, OnDestroy {
   }
 
   private getLibraryArtist(): Subscription {
-    return this.libraryService.getLibraryArtist(this.artistId).subscribe(artist => {
+    return this.libraryService.getSingleLibraryArtist(this.artistId).subscribe(artist => {
       this.setArtist(artist);
     });
   }
