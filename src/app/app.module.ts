@@ -1,5 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule }      from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,9 +26,6 @@ import { ListCollectionComponent } from './components/list-collection/list-colle
 import { ListArtistComponent } from './components/list-artist/list-artist.component';
 import { AuthenticationComponent } from './components/authentication/authentication.component';
 import { WarningModalComponent } from './components/warning-modal/warning-modal.component';
-
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -52,8 +53,10 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     NgbModule,
-    HttpClientModule
+    BrowserAnimationsModule,
+    ScrollingModule
   ],
   entryComponents: [WarningModalComponent],
   providers: [],

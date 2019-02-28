@@ -2,3 +2,7 @@
     margin-left: 5px;
     margin-right: 5px;
 }
+
+cdk-virtual-scroll-viewport {
+    height: 100%;
+}
