@@ -1,13 +1,15 @@
-<table class="table table-hover table-sm">
-  <thead *ngIf="this.showHeaders">
-    <tr>
-      <th>Artist</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let artist of artists; let i = index" 
-        (click)="onArtistSelected(i)">
-      <td>{{artist.attributes.name}}</td>
-    </tr>
-  </tbody>
-</table>
+<cdk-virtual-scroll-viewport [itemSize]="20">
+  <table class="table table-hover table-sm">
+    <thead *ngIf="this.showHeaders">
+      <tr>
+        <th>Artist</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *cdkVirtualFor="let artist of artists; let i = index" 
+          (click)="onArtistSelected(i)">
+        <td>{{artist.attributes.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+</cdk-virtual-scroll-viewport>

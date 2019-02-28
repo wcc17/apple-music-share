@@ -1,31 +1,33 @@
-<table class="table table-hover table-sm">
-  <thead *ngIf="this.showHeaders">
-    <tr>
-      <th *ngIf="this.showArtwork"></th>
-      <th>Name</th>
-      <th>Time</th>
-      <th>Artist</th>
-      <th>Album</th> 
-      <th *ngIf="this.showRequestedBy">Requested By</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let song of songs; let i = index" 
-        [ngClass]="isSelectedSong(i) ? 'table-primary' : ''" 
-        [ngStyle]="shouldDisableNonAppleMusicSongWithIndex(i) ? {'background-color': 'gainsboro'} : {}"
-        (click)="onSongSelected(i)">
-      <td *ngIf="this.showArtwork">
-        <img 
-          height="{{getArtworkHeight()}}"
-          width="{{getArtworkWidth()}}"
-          [src]="getValidArtworkUrl(song.attributes.artwork.url)"
-        />
-      </td>
-      <td>{{song.attributes.name}}</td>
-      <td>{{getMinutesAndSeconds(song.attributes.durationInMillis)}}</td>
-      <td>{{song.attributes.artistName}}</td>
-      <td>{{song.attributes.albumName}}</td>
-      <td *ngIf="this.showRequestedBy">{{song.requestedBy.name}}</td>
-    </tr>
-  </tbody>
-</table>
+<cdk-virtual-scroll-viewport [itemSize]="20">
+  <table class="table table-hover table-sm">
+    <thead *ngIf="this.showHeaders">
+      <tr>
+        <th *ngIf="this.showArtwork"></th>
+        <th>Name</th>
+        <th>Time</th>
+        <th>Artist</th>
+        <th>Album</th> 
+        <th *ngIf="this.showRequestedBy">Requested By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *cdkVirtualFor="let song of songs; let i = index;" 
+          [ngClass]="isSelectedSong(i) ? 'table-primary' : ''" 
+          [ngStyle]="shouldDisableNonAppleMusicSongWithIndex(i) ? {'background-color': 'gainsboro'} : {}"
+          (click)="onSongSelected(i)">
+        <td *ngIf="this.showArtwork">
+          <img 
+            height="{{getArtworkHeight()}}"
+            width="{{getArtworkWidth()}}"
+            [src]="getValidArtworkUrl(song.attributes.artwork.url)"
+          />
+        </td>
+        <td>{{song.attributes.name}}</td>
+        <td>{{getMinutesAndSeconds(song.attributes.durationInMillis)}}</td>
+        <td>{{song.attributes.artistName}}</td>
+        <td>{{song.attributes.albumName}}</td>
+        <td *ngIf="this.showRequestedBy">{{song.requestedBy.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+</cdk-virtual-scroll-viewport>
