@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { from, Observable } from 'rxjs';
 import { MusicKitService } from './music-kit.service';
 import { Song } from '../model/song';
-import { LibrarySongService } from './library-song.service';
-import { LibraryArtistService } from './library-artist.service';
-import { LibraryRecentlyAddedService } from './library-recently-added.service';
-import { LibraryAlbumService } from './library-album.service';
-import { LibraryPlaylistService } from './library-playlist.service';
+import { LibrarySongService } from './library/library-song.service';
+import { LibraryArtistService } from './library/library-artist.service';
+import { LibraryRecentlyAddedService } from './library/library-recently-added.service';
+import { LibraryAlbumService } from './library/library-album.service';
+import { LibraryPlaylistService } from './library/library-playlist.service';
 
 @Injectable({
   providedIn: 'root'
@@ -54,15 +54,5 @@ export class LibraryService {
 
   public getLibraryPlaylist(id: string): Observable<any> {
     return this.libraryPlaylistService.getSingleLibraryPlaylist(id);
-  }
-
-  //TODO: temporary, remove 
-  public getCollectionRequestLimit(): number {
-    return this.musicKitService.getCollectionRequestLimit();
-  }
-
-  //TODO: temporary, remove 
-  public getLibraryRequestLimit(): number {
-    return this.musicKitService.getLibraryRequestLimit();
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MusicKitService } from './music-kit.service';
+import { MusicKitService } from '../music-kit.service';
 import { Observable, from } from 'rxjs';
 
 @Injectable({
