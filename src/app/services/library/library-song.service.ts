@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Song } from '../model/song';
-import { MusicKitService } from './music-kit.service';
+import { Song } from '../../model/song';
+import { MusicKitService } from '../music-kit.service';
 import { Observable, from } from 'rxjs';
 
 @Injectable({
