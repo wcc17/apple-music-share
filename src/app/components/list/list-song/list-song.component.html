@@ -8,6 +8,7 @@
         <th>Artist</th>
         <th>Album</th> 
         <th *ngIf="this.showRequestedBy">Requested By</th>
+        <th *ngIf="this.canRemoveSongFromQueue">Remove</th>
       </tr>
     </thead>
     <tbody>
@@ -27,6 +28,9 @@
         <td>{{song.attributes.artistName}}</td>
         <td>{{song.attributes.albumName}}</td>
         <td *ngIf="this.showRequestedBy">{{song.requestedBy.name}}</td>
+        <td *ngIf="this.canRemoveSongFromQueue" id="removeSongFromQueueElement">
+          <i *ngIf="this.userCanRemoveSong(i)" (click)="removeSongFromQueue(i)" class="material-icons">close</i>
+        </td>
       </tr>
     </tbody>
   </table>

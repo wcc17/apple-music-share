@@ -6,7 +6,7 @@ import { Song } from 'src/app/model/song';
 import { UserService } from 'src/app/services/user.service';
 import { QueueService } from 'src/app/services/queue.service';
 import { ConfigService } from 'src/app/services/config.service';
-import { WarningModalComponent } from '../warning-modal/warning-modal.component';
+import { WarningModalComponent } from '../..//warning-modal/warning-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 const artworkWidth = 50;
@@ -25,6 +25,7 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showRequestedBy: boolean;
   @Input() allowSongSelection: boolean;
   @Input() shouldFilterNonAppleMusicIfApplicable: boolean; //allow components to bypass the filter if they're sure its already apple music
+  @Input() canRemoveSongFromQueue: boolean;
   private subscriptions: Subscription = new Subscription();
 
   constructor(private playerService: PlayerService, 
@@ -47,7 +48,7 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  onSongSelected(index): void {
+  public onSongSelected(index): void {
     if(this.allowSongSelection) {
       if(this.configService.getStandAloneAppMode()) {
         this.handleSongSelectedStandAloneMode(index);
@@ -57,7 +58,11 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  isSelectedSong(index: number): boolean {
+  public isSelectedSong(index: number): boolean {
+    if(!this.allowSongSelection) {
+      return false;
+    }
+
     let currentSongId = this.playerService.getCurrentlyPlayingSongId();
     if(currentSongId && this.songs) {
       return (this.songs[index].id === currentSongId);
@@ -66,8 +71,22 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
     return false;
   }
 
-  shouldDisableNonAppleMusicSongWithIndex(index: number): boolean {
+  public shouldDisableNonAppleMusicSongWithIndex(index: number): boolean {
     return this.shouldDisableNonAppleMusicSong(this.songs[index]);
+  }
+
+  public removeSongFromQueue(index): void {
+    if(this.canRemoveSongFromQueue && !this.configService.getStandAloneAppMode()) {
+      this.queueService.removeSongFromQueue(this.songs[index]);
+    }
+  }
+
+  public userCanRemoveSong(index): boolean {
+    if(this.songs[index] && (this.songs[index].requestedBy.id === this.userService.getUserId())) {
+      return true;
+    }
+
+    return false;
   }
 
   private shouldDisableNonAppleMusicSong(song: Song): boolean {

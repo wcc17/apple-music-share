@@ -70,6 +70,7 @@ export class QueueService {
       return;
     }
 
+    //TODO: this is nasty
     let catalogId = song.attributes.playParams.catalogId;
     if(catalogId) {
       from(this.apiService.getAppleMusicSongFromLibrarySong(catalogId))
@@ -90,6 +91,15 @@ export class QueueService {
     } else {
       console.log('The song chosen is not on Apple Music');
     }
+  }
+
+  public removeSongFromQueue(song: Song): void {
+    this.handleRemovalOfCurrentlyPlayingSong(song);
+
+    this.socketService.send({
+      from: this.userService.getUser(),
+      content: song
+    }, 'remove-from-queue');
   }
 
   public queueRequest(): void {
@@ -153,27 +163,64 @@ export class QueueService {
   }
 
   public handleSongCompleted(playbackState: PlaybackState) {
-
     if(playbackState === PlaybackState.COMPLETED) {
-      if(this.userService.getIsLeader()) {
-        //TODO: this is going to force non-leaders to play the next song, potentially stopping the previous one a bit early. Need to handle this scenario
-        //TODO: should wait a few seconds before actually playing the leader's next song and forcing others.
-        //the leader will have to wait a couple of seconds for the next song, but it will allow follower's songs to finish and then start immediately
-        this.sendClientUpdateToServer(!FORCE_PLAYBACK, REMOVE_MOST_RECENT_SONG_FROM_QUEUE);
+      this.handlePlayNextSong();
+    }
+  }
 
-        //TODO: another scenario thats going to happen (and has already):
-        /**
-         * 1. Leader finishes song
-         * 2. send client update to the server to remove the most recent song from the queue
-         * 3. the server sends the most previous client update containing a force_playback, but the queue hasn't been updated yet
-         * 4. the leader starts to play that song again, but then immediately gets the update from 2.) telling it play the next song instead
-         * 
-         * Fix: should probably give this particular clientMessage a flag that says leader should ignore all other updates
-         * until an update with a specific id/timestamp/something comes in so that a song in't repeated
-         */
+  //TODO: this isn't actually doing anything useful yet.
+  private handleRemovalOfCurrentlyPlayingSong(song: Song) {
+    if(this.playerService.getCurrentlyPlayingSong().id === song.id) {
+
+      //have to make sure we're actually stopping the currently playing song and not a duplicate elsewhere in the queue
+      let lowestOrderInQueue: number = Number.MAX_VALUE;
+      for(let i in this.currentQueue) {
+        let order: number = this.currentQueue[i].orderInQueue;
+        lowestOrderInQueue = (order < lowestOrderInQueue) ? order : lowestOrderInQueue;
+      }
+
+      if(lowestOrderInQueue === song.orderInQueue) {
+        // this.playerService.stop();
+        // this.handlePlayNextSong
+
+        //TODO: scenarios to consider:
+          //1. Leader removes currently playing song from queue
+            //leader's song must stop
+            //leader must send update to everyone else telling them to stop
+            //leader must queue the next song, play it, tell everyone else to play it (this.handlePlayNextSong)
+
+            //NOTE: maybe it will be better to not manually stop the song and wait for a client update to tell us to
+          //2. User removes currently playing song from queue
+            //user's song must stop
+            //either: user sends message to everyone telling them to stop and play the next song
+            //leader must queue the next song, play it, tell everyone else to play it (this.handlePlayNextSong)
+
+            //NOTE: maybe it will be better to not manually stop the song and wait for a client update to tell us to
+
       }
     }
+  }
 
+  private handlePlayNextSong() {
+    if(this.userService.getIsLeader()) {
+      //TODO: this is going to force non-leaders to play the next song, potentially stopping the previous one a bit early. Need to handle this scenario
+      //TODO: should wait a few seconds before actually playing the leader's next song and forcing others.
+      //the leader will have to wait a couple of seconds for the next song, but it will allow follower's songs to finish and then start immediately
+      this.sendClientUpdateToServer(!FORCE_PLAYBACK, REMOVE_MOST_RECENT_SONG_FROM_QUEUE);
+
+      //TODO: another scenario thats going to happen (and has already):
+      /**
+       * 1. Leader finishes song
+       * 2. send client update to the server to remove the most recent song from the queue
+       * 3. the server sends the most previous client update containing a force_playback, but the queue hasn't been updated yet
+       * 4. the leader starts to play that song again, but then immediately gets the update from 2.) telling it play the next song instead
+       * 
+       * Fix: should probably give this particular clientMessage a flag that says leader should ignore all other updates
+       * until an update with a specific id/timestamp/something comes in so that a song in't repeated
+       */
+
+       //TODO: this method also needs to be called in this.removeSongFromQueue
+    }
 
     //if the user is the leader:
       //remove the song from the current queue (make sure you request the latest queue in case anyone has changed it)
@@ -204,8 +251,6 @@ export class QueueService {
         this.playerService.seekToTime(playbackTime + 2); //adding 2 to account for time spent since leader sent update
       }
     }
-
-
   }
 
   private handleConnectEvent(): void {

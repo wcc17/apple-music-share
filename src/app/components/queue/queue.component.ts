@@ -9,7 +9,13 @@ import { ConfigService } from 'src/app/services/config.service';
   styleUrls: ['./queue.component.css']
 })
 export class QueueComponent implements OnInit {
-  constructor(private queueService: QueueService, private configService: ConfigService) { }
+
+  queue: Song[] = [];
+
+  constructor(
+    private queueService: QueueService, 
+    private configService: ConfigService
+  ) { }
 
   ngOnInit() {
     if(this.isSocketConnectionActive()) {
@@ -22,8 +28,7 @@ export class QueueComponent implements OnInit {
   }
 
   getCurrentQueue(): Song[] {
-    //TODO: this isn't getting updated automatically if the user is already on the screen
-    return this.queueService.getCurrentQueue();
+    return this.queueService.getCurrentQueue(); 
   }
 
   isSocketConnectionActive(): boolean {

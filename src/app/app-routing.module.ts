@@ -3,14 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { QueueComponent } from './components/queue/queue.component';
 import { RecentlyAddedComponent } from './components/recently-added/recently-added.component';
 import { PlaylistsComponent } from './components/playlists/playlists.component';
-import { LibraryAlbumsComponent } from './components/library-albums/library-albums.component';
+import { LibraryAlbumsComponent } from './components/library/library-albums/library-albums.component';
 import { SearchComponent } from './components/search/search.component';
 import { SettingsComponent } from './components/settings/settings.component';
-import { SingleAlbumComponent } from './components/single-album/single-album.component';
-import { LibrarySongsComponent } from './components/library-songs/library-songs.component';
-import { SinglePlaylistComponent } from './components/single-playlist/single-playlist.component';
-import { LibraryArtistsComponent } from './components/library-artists/library-artists.component';
-import { SingleArtistComponent } from './components/single-artist/single-artist.component';
+import { SingleAlbumComponent } from './components/single/single-album/single-album.component';
+import { LibrarySongsComponent } from './components/library/library-songs/library-songs.component';
+import { SinglePlaylistComponent } from './components/single/single-playlist/single-playlist.component';
+import { LibraryArtistsComponent } from './components/library/library-artists/library-artists.component';
+import { SingleArtistComponent } from './components/single/single-artist/single-artist.component';
 
 const routes: Routes = [
   { path: 'queue', component: QueueComponent },
