@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser'
 import { from, Observable } from 'rxjs';
-import { mergeMap, map } from 'rxjs/operators';
+import { mergeMap, retryWhen, scan } from 'rxjs/operators';
 import { MusicKitService } from './music-kit.service';
+
+const RETRY_LIMIT = 2;
 
 export enum PlaybackState {
   NONE,
@@ -46,27 +48,39 @@ export class PlayerService {
   }
 
   play(): Observable<any> {
-    return from(this.player.play());
+    return from(this.player.play()).pipe(
+      this.retryOperation('play')
+    );
   }
 
   pause(): Observable<any> {
-    return from(this.player.pause());
+    return from(this.player.pause()).pipe(
+      this.retryOperation('pause')
+    );
   }
 
   stop(): Observable<any> {
-    return from(this.player.stop());
+    return from(this.player.stop()).pipe(
+      this.retryOperation('stop')
+    );
   }
 
   skipToNext(): Observable<any> {
-    return from(this.player.skipToNextItem());
+    return from(this.player.skipToNextItem()).pipe(
+      this.retryOperation('skipToNextItem')
+    );
   }
 
   skipToPrevious(): Observable<any> {
-    return from(this.player.skipToPreviousItem());
+    return from(this.player.skipToPreviousItem()).pipe(
+      this.retryOperation('skipToPreviousItem')
+    );
   }
 
   seekToTime(playbackTime: number): Observable<any> {
-    return from(this.player.seekToTime(playbackTime));
+    return from(this.player.seekToTime(playbackTime)).pipe(
+      this.retryOperation('seekToTime')
+    );
   }
 
   getCurrentlyPlayingSongInfo(): string {
@@ -144,5 +158,18 @@ export class PlayerService {
   getPlaybackStateFromEventPlaybackState(playbackState: string): PlaybackState {
     let playbackString: string = PlaybackState[playbackState];
     return PlaybackState[playbackString];
+  }
+
+  private retryOperation(operation: string) {
+    return retryWhen(error => {
+      return error.pipe(scan((count, currentErr) => {
+        if(count > RETRY_LIMIT) {
+          throw currentErr;
+        } else {
+          console.log('Retrying operation: ' + operation);
+          return count += 1
+        }
+      },0));
+    })
   }
 }

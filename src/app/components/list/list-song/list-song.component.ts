@@ -76,13 +76,17 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public removeSongFromQueue(index): void {
-    if(this.canRemoveSongFromQueue && !this.configService.getStandAloneAppMode()) {
+    if(this.canRemoveSongFromQueue 
+        && !this.configService.getStandAloneAppMode() 
+        && this.songs[index].orderInQueue !== 0) {
       this.queueService.removeSongFromQueue(this.songs[index]);
     }
   }
 
   public userCanRemoveSong(index): boolean {
-    if(this.songs[index] && (this.songs[index].requestedBy.id === this.userService.getUserId())) {
+    if(this.songs[index] 
+        && (this.songs[index].requestedBy.id === this.userService.getUserId()) 
+        && this.songs[index].orderInQueue !== 0) {
       return true;
     }
 

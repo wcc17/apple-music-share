@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { from, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MusicKitService } from './music-kit.service';
 import { Song } from '../model/song';
 import { LibrarySongService } from './library/library-song.service';
@@ -23,7 +23,6 @@ export class LibraryService {
     private libraryPlaylistService: LibraryPlaylistService
   ) { }
 
-  //done:
   public getLibrarySongs(): Song[] {
     return this.librarySongService.getLibrarySongs();
   }
