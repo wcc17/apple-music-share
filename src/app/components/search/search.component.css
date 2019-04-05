@@ -1,5 +1,6 @@
 #searchContainer {
     margin: 40px;
+    height: 100%;
 }
 
 #searchInput {
@@ -17,4 +18,15 @@ app-list-collection {
 
 #searchTypeButtonGroup {
     margin-bottom: 20px;
+}
+
+#searchTabContainer {
+    height: 100%;
+}
+/deep/.mat-tab-body-wrapper {
+    min-height: 100%;
+}
+
+#searchTabGroup {
+    height: 100%;
 }
