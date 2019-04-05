@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PlayerService } from 'src/app/services/player.service';
 import { MusicKitService } from 'src/app/services/music-kit.service';
 import { ConfigService } from 'src/app/services/config.service';
+import { QueueService } from 'src/app/services/queue.service';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
@@ -16,7 +17,8 @@ export class MusicPlayerComponent implements OnInit {
   constructor(
     private playerService: PlayerService, 
     private musicKitService: MusicKitService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private queueService: QueueService
   ) { }
 
   ngOnInit() { }
@@ -93,5 +95,14 @@ export class MusicPlayerComponent implements OnInit {
 
   getIsStandAloneAppMode(): boolean {
     return this.configService.getStandAloneAppMode();
+  }
+
+  public voteToSkip(): void {
+    this.queueService.voteToSkipCurrentSong();
+  }
+
+  public getVotesToSkip(): number {
+    // return this.queueService.getVotesToSkip();
+    return 0;
   }
 }

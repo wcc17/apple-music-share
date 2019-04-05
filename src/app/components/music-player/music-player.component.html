@@ -1,39 +1,55 @@
-<div id="playerDiv" class="border rounded">
-  <div id="infoRow" class="row justify-content-md-center">
-    
-    <div id="artworkCol" class="col">
-        <img 
-          id="currentTrackArtworkImg" 
-          height="{{getArtworkHeight()}}"
-          width="{{getArtworkWidth()}}"
-          [src]="getCurrentSongArtworkUrl()"
-          class="border rounded"
-        />
-    </div>
+ <div class="container">
+  <div class="row">
 
-    <div id="infoCol" class="col">
-      <div [hidden]='getIsCurrentlyPlaying()'>
-        <span>{{ getDefaultTitle() }}</span>
-        <br/>
-        <br/>
+    <div class="col-lg-2"></div> <!--empty column to push main columns to center-->
+
+    <div id="playerDiv" class="col-lg-6 border rounded music-player-content">
+      <div id="infoRow" class="row justify-content-md-center">
+        
+        <div id="artworkCol" class="col">
+            <img 
+              id="currentTrackArtworkImg" 
+              height="{{getArtworkHeight()}}"
+              width="{{getArtworkWidth()}}"
+              [src]="getCurrentSongArtworkUrl()"
+              class="border rounded"
+            />
+        </div>
+
+        <div id="infoCol" class="col">
+          <div [hidden]='getIsCurrentlyPlaying()'>
+            <span>{{ getDefaultTitle() }}</span>
+            <br/>
+            <br/>
+          </div>
+
+          <div [hidden]='!getIsCurrentlyPlaying()'>
+            <span>{{ getCurrentlyPlayingSongTitle() }}</span>
+            <br/>
+            <span>{{ getCurrentlyPlayingSongArtist() }} - {{ getCurrentlyPlayingSongAlbum()}}</span>
+          </div>
+        </div>
+
       </div>
 
-      <div [hidden]='!getIsCurrentlyPlaying()'>
-        <span>{{ getCurrentlyPlayingSongTitle() }}</span>
-        <br/>
-        <span>{{ getCurrentlyPlayingSongArtist() }} - {{ getCurrentlyPlayingSongAlbum()}}</span>
+      <div id="controlsRow" class="row" *ngIf="this.getIsStandAloneAppMode()">
+        <div class="col">
+          <button (click)='onPrevious()' class="music-controls">prev</button>
+          <button (click)='onPlay()' class="music-controls">play</button>
+          <button (click)='onPause()' class="music-controls">pause</button>
+          <button (click)='onStop()' class="music-controls">stop</button>
+          <button (click)='onNext()' class="music-controls">next</button>
+        </div>
+      </div>
+    </div> 
+
+    <div class="col-lg-2 border rounded music-player-content">
+      <div id="voteContainer">
+        <button id="voteToSkipButton" type="button" class="btn btn-primary border setting-button" (click)='voteToSkip()'>Vote to Skip</button><br/>
+        <div>Votes: {{ this.getVotesToSkip() }}</div>
       </div>
     </div>
 
-  </div>
-
-  <div id="controlsRow" class="row" *ngIf="this.getIsStandAloneAppMode()">
-    <div class="col">
-      <button (click)='onPrevious()' class="music-controls">prev</button>
-      <button (click)='onPlay()' class="music-controls">play</button>
-      <button (click)='onPause()' class="music-controls">pause</button>
-      <button (click)='onStop()' class="music-controls">stop</button>
-      <button (click)='onNext()' class="music-controls">next</button>
-    </div>
+    <div class="col-lg-2"></div> <!--empty column to push main columns to center-->
   </div>
 </div> 

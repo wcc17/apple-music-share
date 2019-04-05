@@ -6,6 +6,7 @@ import { Event } from '../model/event';
 import * as socketIo from 'socket.io-client';
 import { ClientUpdateMessage } from '../model/client-update-message';
 import { environment } from 'src/environments/environment';
+import { all } from 'q';
 
 const SERVER_URL = environment.socket_io_server;
 
@@ -39,6 +40,14 @@ export class SocketService {
 
   public onLeaderUpdate(): Observable<ClientUpdateMessage> {
     return this.onListenClientUpdate('leader-update');
+  }
+
+  public onSkipSongForAll(): Observable<Message> {
+    return this.onListen('skip-song-for-all');
+  }
+
+  public onNewVoteCount(): Observable<Message> {
+    return this.onListen('new-vote-count');
   }
 
   public onEvent(event: Event): Observable<any> {

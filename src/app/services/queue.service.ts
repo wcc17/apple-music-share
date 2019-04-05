@@ -17,6 +17,7 @@ const UPDATE_TIME = 3000;
 const FORCE_PLAYBACK = true;
 const REMOVE_MOST_RECENT_SONG_FROM_QUEUE = true;
 
+//TODO: this class has too much going on and needs to be cleaned up
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +25,7 @@ export class QueueService {
   private updateTimer: any;
   private isConnected: boolean = false;
   private currentQueue: Song[] = [];
+  private voteCount: number = 0;
 
   constructor(
     private socketService: SocketService, 
@@ -40,6 +42,8 @@ export class QueueService {
 
       this.socketService.onQueue().subscribe((message: Message) => { this.handleQueueSong(message) });
       this.socketService.onLeaderUpdate().subscribe((message: ClientUpdateMessage) => { this.handleClientUpdate(message) });
+      this.socketService.onSkipSongForAll().subscribe((message: Message) => { this.handleSkipSongForAll(message) });
+      this.socketService.onNewVoteCount().subscribe((message: Message) => { this.handleNewVoteCount(message) });
       this.socketService.onEvent(Event.CONNECT).subscribe(() => { this.handleConnectEvent() });
       this.socketService.onEvent(Event.DISCONNECT).subscribe(() => { this.handleDisconnectEvent() });
       this.playerService.addPlaybackDidChangeEventListener(this.playbackStateDidChange.bind(this))
@@ -53,15 +57,6 @@ export class QueueService {
     this.updateTimer = setInterval(() => {
       this.sendClientUpdateToServer(!FORCE_PLAYBACK, !REMOVE_MOST_RECENT_SONG_FROM_QUEUE);
     }, UPDATE_TIME);
-  }
-
-  public getCurrentQueue(): Song[] {
-    return this.currentQueue;
-  }
-
-  public getIsConnected(): boolean {
-    //the rest of the application only cares if both of these are true
-    return this.isConnected && this.roomService.getHasJoinedRoom();
   }
 
   public queueSong(song: Song, user: User): void {
@@ -108,6 +103,35 @@ export class QueueService {
     }, 'queue-request');
   }
 
+  public voteToSkipCurrentSong(): void {
+    let playbackState = this.playerService.getCurrentPlaybackState();
+    if(playbackState === PlaybackState.PLAYING) {
+      this.socketService.send({
+        from: this.userService.getUser(),
+      }, 'vote-to-skip');
+    }
+  }
+
+
+  public getCurrentQueue(): Song[] {
+    return this.currentQueue;
+  }
+
+  public getIsConnected(): boolean {
+    //the rest of the application only cares if both of these are true
+    return this.isConnected && this.roomService.getHasJoinedRoom();
+  }
+
+  public getVoteCount(): number {
+    return this.voteCount;
+  }
+
+  public handleSongCompleted(playbackState: PlaybackState) {
+    if(playbackState === PlaybackState.COMPLETED) {
+      this.handlePlayNextSong();
+    }
+  }
+
   private handleQueueSong(message: Message) {
     this.messageService.handleMessage(message);
 
@@ -124,6 +148,26 @@ export class QueueService {
     } else {
       this.handleFollowerUpdate(message);
     }
+  }
+
+  private handleSkipSongForAll(message: Message) {
+    from(this.playerService.stop())
+      .pipe(map(x => this.handleLeaderUpdate(message)))
+      .subscribe();
+  }
+
+  private handleNewVoteCount(message: Message) {
+    this.voteCount = message.voteCount;
+  }
+
+  private handleConnectEvent(): void {
+    let user: User = this.userService.getUser();
+    this.messageService.handleMessage(this.messageService.buildMessage('connected ' + user.name, user));
+  }
+
+  private handleDisconnectEvent(): void {
+    let user: User = this.userService.getUser();
+    this.messageService.handleMessage(this.messageService.buildMessage('disconnected ' + user.name, user));
   }
 
   private handleLeaderUpdate(message: Message): void {
@@ -159,12 +203,6 @@ export class QueueService {
     //if the message says the user should be the leader, make the user the leader.
     if(message.from.id === this.userService.getUserId() && message.from.isLeader) {
       this.userService.setIsLeader(true);
-    }
-  }
-
-  public handleSongCompleted(playbackState: PlaybackState) {
-    if(playbackState === PlaybackState.COMPLETED) {
-      this.handlePlayNextSong();
     }
   }
 
@@ -253,22 +291,6 @@ export class QueueService {
     }
   }
 
-  private handleConnectEvent(): void {
-    let user: User = this.userService.getUser();
-    this.messageService.handleMessage(this.messageService.buildMessage('connected ' + user.name, user));
-  }
-
-  private handleDisconnectEvent(): void {
-    let user: User = this.userService.getUser();
-    this.messageService.handleMessage(this.messageService.buildMessage('disconnected ' + user.name, user));
-  }
-
-  private playSongAndSeekToTime(song: Song, playbackTime: number): void {
-    from(this.playerService.playSong([song], 0))
-        .pipe(switchMap(x => this.playerService.seekToTime(playbackTime)))
-        .subscribe();
-  }
-
   private sendClientUpdateToServer(shouldForcePlayback: boolean, shouldRemoveMostRecentSong: boolean): void {
     if(!this.isConnected) {
       return;
@@ -291,6 +313,12 @@ export class QueueService {
         removeMostRecentSong: shouldRemoveMostRecentSong
       }, 'client-update');
     }
+  }
+
+  private playSongAndSeekToTime(song: Song, playbackTime: number): void {
+    from(this.playerService.playSong([song], 0))
+        .pipe(switchMap(x => this.playerService.seekToTime(playbackTime)))
+        .subscribe();
   }
 
   private playbackStateDidChange(event: any): void {
