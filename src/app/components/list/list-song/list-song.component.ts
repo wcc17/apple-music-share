@@ -8,9 +8,11 @@ import { QueueService } from 'src/app/services/queue.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { WarningModalComponent } from '../..//warning-modal/warning-modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
+const snackBarDuration = 2000;
 
 @Component({
   selector: 'app-list-song',
@@ -27,13 +29,15 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
   @Input() shouldFilterNonAppleMusicIfApplicable: boolean; //allow components to bypass the filter if they're sure its already apple music
   @Input() canRemoveSongFromQueue: boolean;
   private subscriptions: Subscription = new Subscription();
+  private snackBarReference = null;
 
   constructor(private playerService: PlayerService, 
     private musicKitService: MusicKitService, 
     private userService: UserService,
     private queueService: QueueService,
     private configService: ConfigService, 
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() { }
@@ -48,7 +52,7 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  public onSongSelected(index): void {
+  public onSongSelected(index, toolTip): void {
     if(this.allowSongSelection) {
       if(this.configService.getStandAloneAppMode()) {
         this.handleSongSelectedStandAloneMode(index);
@@ -142,7 +146,7 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
   getArtworkHeight(): number {
     return artworkHeight;
   }
-
+  
   private handleSongSelectedStandAloneMode(index: number): void {
     this.subscriptions.add(this.playerService.playSong(this.songs, index).subscribe());
   }
@@ -152,12 +156,36 @@ export class ListSongComponent implements OnInit, OnChanges, OnDestroy {
     let isAppleMusicSong: boolean = this.isAppleMusicSong(this.songs[index]);
 
     if(isConnectedToServerForShare && isAppleMusicSong) {
-      this.queueSongInSharedQueue(index);
+      this.handleQueueSong(index);
     } else if (isConnectedToServerForShare && !isAppleMusicSong) {
       this.showAppleMusicWarningModal();
     } else if (!isConnectedToServerForShare) {
       this.showNotConnectedWarningModal();
     }
+  }
+
+  private handleQueueSong(index: number): void {
+    if(this.isSnackBarReady()) {
+      this.snackBarReference = this.snackBar.open('Song added to queue', '', {
+        duration: snackBarDuration
+      });
+  
+      this.snackBarReference = this.snackBarReference.containerInstance;
+  
+      this.queueSongInSharedQueue(index);
+    }
+  }
+
+  private isSnackBarReady(): boolean {
+    if (!this.snackBarReference) { //we haven't even used it yet, so return true
+      return true;  
+    }
+
+    if (this.snackBarReference && this.snackBarReference._animationState === 'hidden') {
+      return true;
+    }
+
+    return false;
   }
 
   private queueSongInSharedQueue(index: number): void {

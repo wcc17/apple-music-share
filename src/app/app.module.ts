@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { MatTabsModule } from '@angular/material';
+import { MatTabsModule, MatSnackBarModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -58,7 +58,8 @@ import { WarningModalComponent } from './components/warning-modal/warning-modal.
     NgbModule,
     BrowserAnimationsModule,
     ScrollingModule,
-    MatTabsModule
+    MatTabsModule,
+    MatSnackBarModule
   ],
   entryComponents: [WarningModalComponent],
   providers: [],

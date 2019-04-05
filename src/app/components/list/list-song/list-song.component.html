@@ -15,7 +15,8 @@
       <tr *cdkVirtualFor="let song of songs; let i = index;" 
           [ngClass]="isSelectedSong(i) ? 'table-primary' : ''" 
           [ngStyle]="shouldDisableNonAppleMusicSongWithIndex(i) ? {'background-color': 'gainsboro'} : {}"
-          (click)="onSongSelected(i)">
+          (click)="onSongSelected(i)"
+          >
         <td *ngIf="this.showArtwork">
           <img 
             height="{{getArtworkHeight()}}"
