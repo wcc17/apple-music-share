@@ -10,13 +10,10 @@ export class SingleCollectionComponent implements OnInit {
 
   @Input() showSongArtwork: Boolean;
   @Input() collection: any;
-  private songs: any[];
 
   constructor(private musicKitService: MusicKitService) { }
 
-  ngOnInit() {
-    this.songs = this.collection.relationships.tracks.data;
-  }
+  ngOnInit() { }
 
   getValidArtworkUrl(width: number, height: number, url: string): string {
     return this.musicKitService.getFormattedArtworkUrl(url, width, height);
@@ -29,6 +26,10 @@ export class SingleCollectionComponent implements OnInit {
       let url: string = this.collection.attributes.artwork.url;
       return this.getValidArtworkUrl(width, height, url);
     }
+  }
+
+  getTracks(): any[] {
+    return this.collection.relationships.tracks.data;
   }
 
 }

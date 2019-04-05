@@ -1,9 +1,7 @@
-<div *ngIf="this.artist">
-  <div class="jumbotron jumbotron-fluid border border-dark">
-    <h1>{{ this.artist.attributes.name }}</h1>
-  </div>
-  <div>
-    <!--TODO: Needs to wait on the page to load first! This entire page does-->
-    <app-list-collection *ngIf="this.artist" [collections]="this.artist.relationships.albums.data"></app-list-collection>
-  </div>
+<div class="jumbotron jumbotron-fluid border border-dark" *ngIf="this.artist">
+  <h1>{{ this.artist.attributes.name }}</h1>
+</div>
+<div id="listContainer" *ngIf="this.artist">
+  <!--TODO: Needs to wait on the page to load first! This entire page does-->
+  <app-list-collection *ngIf="this.artist" [collections]="this.artist.relationships.albums.data"></app-list-collection>
 </div>

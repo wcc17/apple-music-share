@@ -11,3 +11,7 @@
 #thumbnailCol {
     margin-left: 20px;
 }
+
+#listContainer {
+    height: 100%;
+}
