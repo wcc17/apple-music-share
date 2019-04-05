@@ -12,7 +12,7 @@ import { MatSnackBar } from '@angular/material';
 
 const artworkWidth = 50;
 const artworkHeight = 50;
-const snackBarDuration = 2000;
+const snackBarDuration = 1000;
 
 @Component({
   selector: 'app-list-song',

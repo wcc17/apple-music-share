@@ -8,4 +8,5 @@ export class Message {
     action?: Action;
     debugMessage?: string; //will hold information from the server being sent to the client
     currentQueue?: Song[];
+    voteCount?: number;
 }
