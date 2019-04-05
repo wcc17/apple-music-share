@@ -21,10 +21,9 @@
     </button>
   </div>
   
-  <div id="searchAccordionContainer">
-    <ngb-accordion [closeOthers]="true">
-      <ngb-panel id="songPanel" title="Songs" *ngIf="this.songResults.length > 0">
-        <ng-template ngbPanelContent>
+  <div id="searchTabContainer">
+    <mat-tab-group id="searchTabGroup">
+        <mat-tab label="Songs">
           <app-list-song *ngIf="this.songResults" 
             [songs]="this.songResults" 
             [showArtwork]="true" 
@@ -34,26 +33,16 @@
             [shouldFilterNonAppleMusicIfApplicable]="true"
             [canRemoveSongFromQueue]="false">
           </app-list-song>
-        </ng-template>
-      </ngb-panel>
-    
-      <ngb-panel id="artistPanel" title="Artists" *ngIf="this.artistResults.length > 0">
-        <ng-template ngbPanelContent>
+        </mat-tab>
+        <mat-tab label="Artists">
           <app-list-artist *ngIf="this.artistResults" [artists]="this.artistResults" [showHeaders]="false"></app-list-artist>
-        </ng-template>
-      </ngb-panel>
-    
-      <ngb-panel id="albumPanel" title="Albums" *ngIf="this.albumResults.length > 0">
-        <ng-template ngbPanelContent>
+        </mat-tab>
+        <mat-tab label="Albums">
           <app-list-collection *ngIf="this.albumResults" [collections]="this.albumResults"></app-list-collection>
-        </ng-template>
-      </ngb-panel>
-    
-      <ngb-panel id="playlistPanel" title="Playlists" *ngIf="this.playlistResults.length > 0">
-        <ng-template ngbPanelContent>
-            <app-list-collection *ngIf="this.playlistResults" [collections]="this.playlistResults"></app-list-collection>
-        </ng-template>
-      </ngb-panel>
-    </ngb-accordion>
+        </mat-tab>
+        <mat-tab label="Playlists">
+          <app-list-collection *ngIf="this.playlistResults" [collections]="this.playlistResults"></app-list-collection>
+        </mat-tab>
+      </mat-tab-group>
   </div>
 </div>
