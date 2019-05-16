@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Title } from '@angular/platform-browser'
 import { from, Observable } from 'rxjs';
-import { mergeMap, retryWhen, scan } from 'rxjs/operators';
+import { mergeMap, retryWhen, scan, map } from 'rxjs/operators';
 import { MusicKitService } from './music-kit.service';
 
 const RETRY_LIMIT = 2;
@@ -42,8 +42,9 @@ export class PlayerService {
       //songs play without the forEach, but musicKit still complains about not finding container.id in the song object
       songs.forEach(song => song['container'] = { 'id' : song.id });
 
-      return from(this.musicKitService.setQueue({ 'items': songs, startPosition: index}))
-        .pipe(mergeMap(x => this.play()));
+      // return from(this.musicKitService.setQueue({ 'items': songs, startPosition: index}))
+      return from(this.musicKitService.setQueue({'song' : songs[index].id}))
+        .pipe(map(x => this.play()));
     }
   }
 
